@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>견적서_한원희버전</title>
+<title>견적서_한원희버전_상세일정통합_붙여넣기수정</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 <style>
@@ -935,9 +934,57 @@
         if (!hasContent) return "";
         return `<tr><td style="padding-top:20px"><table style="width:100%;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/icon_05.png" style="vertical-align:middle;"> <span style="vertical-align: middle;"><strong>일정&기타사항</strong></span></p></td></tr><tr><td style="border:1px solid #f37021;"><table width="100%"><tbody>${summaryHtmlPart}${(summaryHtmlPart && detailedHtmlPart && !detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.")) ? '<tr><td style="padding: 5px 10px;"><hr style="border:0; border-top:1px dashed #ccc;"></td></tr>' : ''}${detailedHtmlPart}</tbody></table></td></tr></tbody></table></td></tr>`;
     }
+
     function getMobileStylesForDownload() {
-        return `<style> @media screen and (max-width: 760px) { body { padding: 5px !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table[style*="width:710px"] { width: 100% !important; min-width: 300px; } img { max-width: 100%; height: auto !important; } td[style*="padding:20px 15px 40px"] { padding: 10px 8px 20px !important; } .quote-group-main-title { font-size: 14px !important; } .section-title, .price-group-title, .flight-group-title, .basic-info-text p, .traveler-info-text .info-p, .inclusion-exclusion-text div, .detailed-itinerary-text, .footer-notice td, .footer-address { font-size: 11px !important; } .detailed-itinerary-text table, .detailed-itinerary-text tr, .detailed-itinerary-text td, .detailed-itinerary-text th, .detailed-itinerary-text p, .detailed-itinerary-text span, .detailed-itinerary-text div, .detailed-itinerary-text li, .detailed-itinerary-text b, .detailed-itinerary-text strong { font-size: 11px !important; line-height: 1.4 !important; } .detailed-itinerary-text table[class*="data-table"] th, .detailed-itinerary-text table[class*="data-table"] td { padding: 3px 2px !important; word-break: break-all !important; white-space: normal !important; } .section-title img { width: 16px !important; height: 16px !important; vertical-align: middle !important; } .section-title strong { vertical-align: middle !important; } td.section-content-box, td.section-content-box p, td.section-content-box div { font-size: 11px !important; line-height: 1.5 !important; } .product-agent-info-table td, .price-details-table th, .price-details-table td, .flight-details-table th, .flight-details-table td, .itinerary-summary-table th, .itinerary-summary-table td, .flight-remark { font-size: 9px !important; padding: 3px 2px !important; word-break: break-all !important; white-space: normal !important; } .emp-details { padding-left: 0px !important; display: block !important; line-height: 1.4 !important; } .product-agent-info-table td[style*="width:100px"] { width: auto !important; min-width: 60px; padding-right: 5px !important; } } </style>`;
+        return `<style> @media screen and (max-width: 760px) {
+            body { padding: 5px !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+            table[style*="width:710px"] { width: 100% !important; min-width: 300px; }
+            img { max-width: 100%; height: auto !important; }
+            td[style*="padding:20px 15px 40px"] { padding: 10px 8px 20px !important; }
+            .quote-group-main-title { font-size: 14px !important; }
+            .section-title, .price-group-title, .flight-group-title, .basic-info-text p, .traveler-info-text .info-p, .inclusion-exclusion-text div, .detailed-itinerary-text, .footer-notice td, .footer-address { font-size: 11px !important; }
+
+            /* 상세 일정표 관련 폰트 크기 수정 */
+            .detailed-itinerary-text table,
+            .detailed-itinerary-text tr,
+            .detailed-itinerary-text td,
+            .detailed-itinerary-text th,
+            .detailed-itinerary-text p,
+            .detailed-itinerary-text span,
+            .detailed-itinerary-text div,
+            .detailed-itinerary-text li,
+            .detailed-itinerary-text b,
+            .detailed-itinerary-text strong {
+                font-size: 9px !important; /* 변경됨 */
+                line-height: 1.3 !important; /* 폰트가 작아졌으므로 line-height도 약간 줄여볼 수 있습니다. */
+            }
+            .detailed-itinerary-text table[class*="data-table"] th,
+            .detailed-itinerary-text table[class*="data-table"] td {
+                padding: 3px 2px !important;
+                word-break: break-all !important;
+                white-space: normal !important;
+            }
+
+            .section-title img { width: 16px !important; height: 16px !important; vertical-align: middle !important; }
+            .section-title strong { vertical-align: middle !important; }
+            td.section-content-box, td.section-content-box p, td.section-content-box div { font-size: 11px !important; line-height: 1.5 !important; }
+
+            /* 다른 표들의 폰트 크기 (기존 9px 유지) */
+            .product-agent-info-table td,
+            .price-details-table th, .price-details-table td,
+            .flight-details-table th, .flight-details-table td,
+            .itinerary-summary-table th, .itinerary-summary-table td,
+            .flight-remark {
+                font-size: 9px !important;
+                padding: 3px 2px !important;
+                word-break: break-all !important;
+                white-space: normal !important;
+            }
+            .emp-details { padding-left: 0px !important; display: block !important; line-height: 1.4 !important; }
+            .product-agent-info-table td[style*="width:100px"] { width: auto !important; min-width: 60px; padding-right: 5px !important; }
+        } </style>`;
     }
+
 
     // ----- 데이터 저장/불러오기 함수 -----
     function getAllEditorDataAsObject() {
@@ -983,7 +1030,6 @@
                         title: rowEl.querySelector(`input[name="p_title[${groupIndex}][${subGroupIdx}][]"]`).value,
                         perPrice: rowEl.querySelector(`input[name="p_perprice[${groupIndex}][${subGroupIdx}][]"]`).value,
                         number: rowEl.querySelector(`input[name="p_number[${groupIndex}][${subGroupIdx}][]"]`).value,
-                        // totalPrice는 계산되므로 저장 안함
                         bigo: rowEl.querySelector(`input[name="p_bigo[${groupIndex}][${subGroupIdx}][]"]`).value,
                     });
                 });
@@ -1267,7 +1313,7 @@
         let fullPreviewHTML = `<table style="width:710px; margin: 0 auto; border-spacing: 0; border-collapse: collapse;"><tbody>${_getPreviewTemplateHeaderHTML()}<tr><td style="padding: 0px; width:100%; border:1px solid #d2d2d2; background-color: #ffffff;"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody><tr><td style="padding:20px 15px 40px"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody>${mainContentHTML}${_getPreviewTemplateFooterHTML()}</tbody></table></td></tr></tbody></table></td></tr></tbody></table><map name="naeil_header" id="naeil_header"></map><map name="naeil_footer" id="naeil_footer"></map>`;
         const mobileStyles = getMobileStylesForDownload();
         const fontAwesomeLink = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">';
-        const toggleScript = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:11px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
+        const toggleScript = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:9px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
         const previewWindow = window.open('', '_blank', 'width=840,height=800,scrollbars=yes,resizable=yes');
         if (previewWindow) {
             previewWindow.document.write('<html><head><title>견적서 미리보기</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' + fontAwesomeLink + mobileStyles + toggleScript + '</head><body style="margin:0; padding:20px; background-color: #f0f0f0;">' + fullPreviewHTML + '</body></html>');
@@ -1294,7 +1340,7 @@
         quoteGroupElements_dl.forEach((groupEl) => mainContentHTML += _generatePreviewForSingleQuoteGroupHTML_Template(groupEl, groupEl.dataset.groupIndex, totalQuoteGroups_dl));
 
         const fontAwesomeLink_dl = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">';
-        const toggleScript_dl = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; cursor: pointer; } @media screen and (max-width: 760px) { .preview-toggle-icon { font-size: 1em; } } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:11px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
+        const toggleScript_dl = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; cursor: pointer; } @media screen and (max-width: 760px) { .preview-toggle-icon { font-size: 1em; } } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:9px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
 
         const editorData = getAllEditorDataAsObject();
         const editorDataJSONString = JSON.stringify(editorData);
