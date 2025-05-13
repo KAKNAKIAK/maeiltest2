@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>견적서_한원희버전_상세일정통합_붙여넣기수정</title>
+<title>견적서_한원희버전</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 <style>
@@ -83,65 +83,65 @@
     }
 
     /* --- 상세 일정표 관련 스타일 시작 --- */
-    .detailed-itinerary-day-group { 
-        border: 1px solid #d1d5db; 
+    .detailed-itinerary-day-group {
+        border: 1px solid #d1d5db;
         padding: 1rem;
-        margin-bottom: 1.5rem; 
-        border-radius: 0.375rem; 
-        background-color: #ffffff; 
+        margin-bottom: 1.5rem;
+        border-radius: 0.375rem;
+        background-color: #ffffff;
         position: relative;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); 
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     }
     .detailed-itinerary-group-title-input { /* 일차 정보 입력 필드 */
-        width: calc(100% - 2.5rem); 
+        width: calc(100% - 2.5rem);
         padding: 0.5rem 0.75rem;
-        border-bottom: 1px solid #d1d5db; 
+        border-bottom: 1px solid #d1d5db;
         outline: none;
-        font-size: 1.125rem; 
-        font-weight: 600; 
-        margin-bottom: 0.75rem; 
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
     }
     .detailed-itinerary-group-title-input::placeholder { /* 자동 넘버링 스타일 */
         color: #4b5563; /* Tailwind gray-600 or as desired */
         font-weight: bold;
     }
     .detailed-itinerary-group-title-input:focus {
-        border-color: #ff5a00; 
+        border-color: #ff5a00;
     }
-    .delete-detailed-itinerary-day-group-btn { 
+    .delete-detailed-itinerary-day-group-btn {
         position: absolute;
         top: 0.75rem;
         right: 0.75rem;
-        color: #ef4444; 
+        color: #ef4444;
         background-color: transparent;
         border: none;
         padding: 0.25rem;
         cursor: pointer;
-        font-size: 0.875rem; 
+        font-size: 0.875rem;
     }
     .delete-detailed-itinerary-day-group-btn:hover {
-        color: #dc2626; 
+        color: #dc2626;
     }
-    .table-input-field { 
+    .table-input-field {
         width: 100%;
-        border: 1px solid #d1d5db; 
-        border-radius: 0.375rem; 
-        box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05); 
-        padding: 0.25rem 0.5rem; 
-        font-size: 0.875rem; 
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
         outline: none;
-        min-height: calc(0.875em * 1.5 + 0.25rem * 2 + 2px); 
-        line-height: 1.5; 
-        -webkit-user-modify: read-write-plaintext-only; 
+        min-height: calc(0.875em * 1.5 + 0.25rem * 2 + 2px);
+        line-height: 1.5;
+        -webkit-user-modify: read-write-plaintext-only;
     }
     .table-input-field:focus {
-        border-color: #ff5a00; 
-        box-shadow: 0 0 0 2px rgba(255, 90, 0, 0.2); 
+        border-color: #ff5a00;
+        box-shadow: 0 0 0 2px rgba(255, 90, 0, 0.2);
     }
     .table-input-field[contenteditable=true][data-placeholder]:empty:before {
         content: attr(data-placeholder);
-        color: #9ca3af; 
-        pointer-events: none; 
+        color: #9ca3af;
+        pointer-events: none;
         display: inline-block;
     }
     /* --- 상세 일정표 관련 스타일 끝 --- */
@@ -192,6 +192,8 @@
     <footer class="mt-8 text-center text-gray-500 text-sm border-t pt-4">
 <button type="button" onclick="syncAllContentEditablesToTextareas(); previewQuote();" style="padding: 5px 10px;font-size: 13px;cursor: pointer;border: 1px solid #ccc;background: #e1e1e1;font-weight: 700;color: #000;">미리보기</button>
 <button type="button" onclick="downloadGeneratedHTML();" style="padding: 5px 10px;font-size: 13px;cursor: pointer;border: 1px solid #ccc;background: #28a745;font-weight: 700;color: #fff; margin-left: 5px;">HTML 파일로 저장</button>
+<input type="file" id="loadQuoteFile" accept=".html" style="display: none;">
+<button type="button" onclick="document.getElementById('loadQuoteFile').click();" style="padding: 5px 10px; font-size: 13px; cursor: pointer; border: 1px solid #ccc; background: #f0ad4e; font-weight: 700; color: #fff; margin-left: 5px;">견적 불러오기 (HTML)</button>
 </footer>
 </div>
 </form>
@@ -207,7 +209,7 @@
         container.addEventListener('focusin', function(event) {
             const target = event.target;
             if (target.matches('input[type="text"], input[type="email"], input[type="number"], textarea')) {
-                if (typeof target.select === 'function' && !target.isContentEditable) { 
+                if (typeof target.select === 'function' && !target.isContentEditable) {
                     setTimeout(() => { target.select(); }, 0);
                 }
             }
@@ -221,7 +223,7 @@
         quoteGroupDiv.id = groupId;
         quoteGroupDiv.dataset.groupIndex = groupIndex;
 
-        detailedItineraryDayGroupCounters[groupIndex] = 0; 
+        detailedItineraryDayGroupCounters[groupIndex] = 0;
 
         quoteGroupDiv.innerHTML = `
             <div class="group-action-buttons">
@@ -300,12 +302,12 @@
         } else {
             quoteGroupsContainer.appendChild(quoteGroupDiv);
         }
-        
+
         initPriceSectionForGroup(quoteGroupDiv, groupIndex, sourceGroupData ? sourceGroupData.priceSubgroups : null);
         initFlightScheduleForGroup(quoteGroupDiv, groupIndex, sourceGroupData ? sourceGroupData.flightSubgroups : null);
         initInclusionExclusionForGroup(quoteGroupDiv, groupIndex, sourceGroupData);
         initItinerarySummaryForGroup(quoteGroupDiv, groupIndex, sourceGroupData ? sourceGroupData.itinerarySummaryRows : null);
-        initItineraryDetailForQuoteGroup(quoteGroupDiv, groupIndex, sourceGroupData); 
+        initItineraryDetailForQuoteGroup(quoteGroupDiv, groupIndex, sourceGroupData);
 
         if (sourceGroupData) {
             const titleInput = quoteGroupDiv.querySelector(`input[name="quote_group_title[${groupIndex}]"]`);
@@ -313,7 +315,7 @@
             updateDetailedItineraryGroupNumbering(groupIndex);
         } else {
             const detailedContainer = quoteGroupDiv.querySelector(`#detailedItineraryGroupsContainer_${groupIndex}`);
-            if(detailedContainer) { 
+            if(detailedContainer) {
                 createDetailedItineraryDayGroupForQuoteGroup(groupIndex, detailedContainer);
                 updateDetailedItineraryGroupNumbering(groupIndex);
             }
@@ -339,14 +341,14 @@
         }
     }
    function createPriceSubgroup(container, groupIndex, subGroupIndex, sourceSubgroupData = null) {
-    const sectionId = `priceSection_${groupIndex}_${subGroupIndex}`; 
-    const tableBodyId = `priceTableBody_${groupIndex}_${subGroupIndex}`; 
-    const grandTotalId = `grandTotal_${groupIndex}_${subGroupIndex}`; 
+    const sectionId = `priceSection_${groupIndex}_${subGroupIndex}`;
+    const tableBodyId = `priceTableBody_${groupIndex}_${subGroupIndex}`;
+    const grandTotalId = `grandTotal_${groupIndex}_${subGroupIndex}`;
     const groupTitleInputName = `price_subgroup_title[${groupIndex}][${subGroupIndex}]`;
-    const sectionDiv = document.createElement('div'); 
-    sectionDiv.className = 'dynamic-section price-subgroup'; 
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'dynamic-section price-subgroup';
     sectionDiv.id = sectionId;
-    sectionDiv.dataset.groupIndex = groupIndex; 
+    sectionDiv.dataset.groupIndex = groupIndex;
     sectionDiv.dataset.subGroupIndex = subGroupIndex;
     const initialSubgroupTitle = sourceSubgroupData ? sourceSubgroupData.title : "";
     sectionDiv.innerHTML = `
@@ -366,7 +368,7 @@
     const tbody = sectionDiv.querySelector('.price-table-body');
     if (sourceSubgroupData && sourceSubgroupData.rows && sourceSubgroupData.rows.length > 0) {
         sourceSubgroupData.rows.forEach(rowData => addPriceRowToExistingSubgroup(null, sectionDiv, rowData));
-    } else { 
+    } else {
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "성인요금", perPrice: "", number: 1, bigo: "" });
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "소아요금", perPrice: "", number: 0, bigo: "2~12세미만(좌석점유)\n" });
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "유아요금", perPrice: "", number: 0, bigo: "24개월미만(좌석미점유)\n" });
@@ -374,35 +376,35 @@
     initPriceTableForSubgroup(sectionDiv);
     return sectionDiv;
 }
-    function initPriceTableForSubgroup(subgroupElement) { 
+    function initPriceTableForSubgroup(subgroupElement) {
         subgroupElement.querySelectorAll('.price-per-person, .person-count').forEach(input => input.addEventListener('input', (e) => updateRowTotalForSubgroup(e, subgroupElement)));
-        subgroupElement.querySelectorAll('.price-table-body tr').forEach(row => { 
-            const firstInput = row.querySelector('.price-per-person'); 
-            if (firstInput) updateRowTotalForSubgroup({ target: firstInput }, subgroupElement); 
+        subgroupElement.querySelectorAll('.price-table-body tr').forEach(row => {
+            const firstInput = row.querySelector('.price-per-person');
+            if (firstInput) updateRowTotalForSubgroup({ target: firstInput }, subgroupElement);
         });
         const addRowButton = subgroupElement.querySelector('.add-price-row-to-subgroup');
         if (addRowButton) addRowButton.addEventListener('click', (e) => addPriceRowToExistingSubgroup(e, subgroupElement));
     }
-    function updateRowTotalForSubgroup(event, subgroupElement) { 
-        const row = event.target.closest('tr'); if (!row) return; 
-        const pricePerPersonInput = row.querySelector('.price-per-person'); 
-        const personCountInput = row.querySelector('.person-count'); 
+    function updateRowTotalForSubgroup(event, subgroupElement) {
+        const row = event.target.closest('tr'); if (!row) return;
+        const pricePerPersonInput = row.querySelector('.price-per-person');
+        const personCountInput = row.querySelector('.person-count');
         const totalPriceInput = row.querySelector('.total-price');
         if (!pricePerPersonInput || !personCountInput || !totalPriceInput) return;
-        const pricePerPerson = parseFloat(pricePerPersonInput.value) || 0; 
+        const pricePerPerson = parseFloat(pricePerPersonInput.value) || 0;
         const personCount = parseInt(personCountInput.value) || 0;
-        totalPriceInput.value = (pricePerPerson * personCount).toLocaleString(); 
+        totalPriceInput.value = (pricePerPerson * personCount).toLocaleString();
         updateGrandTotalForSubgroup(subgroupElement);
     }
-    function updateGrandTotalForSubgroup(subgroupElement) { 
+    function updateGrandTotalForSubgroup(subgroupElement) {
         let grandTotal = 0;
         subgroupElement.querySelectorAll('.price-table-body .total-price').forEach(cell => grandTotal += parseFloat(cell.value.replace(/,/g, '')) || 0);
-        const grandTotalInput = subgroupElement.querySelector('.grand-total-input'); 
+        const grandTotalInput = subgroupElement.querySelector('.grand-total-input');
         if (grandTotalInput) grandTotalInput.value = grandTotal.toLocaleString();
     }
-    function addPriceRowToExistingSubgroup(event, subgroupElement, rowData = null) { 
+    function addPriceRowToExistingSubgroup(event, subgroupElement, rowData = null) {
         const tbody = subgroupElement.querySelector('.price-table-body');
-        const groupIndex = subgroupElement.dataset.groupIndex; 
+        const groupIndex = subgroupElement.dataset.groupIndex;
         const subGroupIndex = subgroupElement.dataset.subGroupIndex;
         if (!tbody || groupIndex === undefined || subGroupIndex === undefined) return;
         const titleVal = rowData ? rowData.title : "추가 비용";
@@ -411,12 +413,12 @@
         const bigoVal = rowData ? rowData.bigo : "";
         const tr = document.createElement('tr');
         tr.innerHTML = `<td class="border p-2"><input type="text" name="p_title[${groupIndex}][${subGroupIndex}][]" value="${titleVal}" class="w-full border-0 focus:ring-0"></td><td class="border p-2"><input type="number" name="p_perprice[${groupIndex}][${subGroupIndex}][]" class="price-per-person w-full border-0 focus:ring-0" value="${perPriceVal}"></td><td class="border p-2"><input type="number" name="p_number[${groupIndex}][${subGroupIndex}][]" class="person-count w-full border-0 focus:ring-0" value="${numberVal}"></td><td class="border p-2"><input type="text" name="p_totalprice[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 total-price" value="0" readonly></td><td class="border p-2"><input type="text" name="p_bigo[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0" value="${bigoVal}"></td><td class="border p-2 text-center"><button type="button" class="delete-row text-red-500 hover:text-red-700" title="삭제"><i class="fas fa-trash"></i></button></td>`;
-        tbody.appendChild(tr); 
+        tbody.appendChild(tr);
         tr.querySelectorAll('.price-per-person, .person-count').forEach(input => input.addEventListener('input', (e) => updateRowTotalForSubgroup(e, subgroupElement)));
-        const firstInput = tr.querySelector('.price-per-person'); 
+        const firstInput = tr.querySelector('.price-per-person');
         if (firstInput) updateRowTotalForSubgroup({ target: firstInput }, subgroupElement);
     }
-    function initFlightScheduleForGroup(quoteGroupElement, groupIndex, sourceFlightSubgroups = null) { 
+    function initFlightScheduleForGroup(quoteGroupElement, groupIndex, sourceFlightSubgroups = null) {
         const addFlightSubgroupButton = quoteGroupElement.querySelector('.add-flight-subgroup-button');
         const flightScheduleContainer = quoteGroupElement.querySelector(`#flightScheduleGroupsContainer_${groupIndex}`);
         let flightSubgroupCounter = 0;
@@ -427,12 +429,12 @@
             createFlightSubgroup(flightScheduleContainer, groupIndex, flightSubgroupCounter++);
         }
     }
-    function createFlightSubgroup(container, groupIndex, subGroupIndex, sourceSubgroupData = null) { 
-        const groupId = `flightScheduleGroup_${groupIndex}_${subGroupIndex}`; 
-        const tableBodyId = `flightTableBody_${groupIndex}_${subGroupIndex}`; 
+    function createFlightSubgroup(container, groupIndex, subGroupIndex, sourceSubgroupData = null) {
+        const groupId = `flightScheduleGroup_${groupIndex}_${subGroupIndex}`;
+        const tableBodyId = `flightTableBody_${groupIndex}_${subGroupIndex}`;
         const groupTitleInputName = `flight_group_title[${groupIndex}][${subGroupIndex}]`;
-        const groupDiv = document.createElement('div'); 
-        groupDiv.className = 'dynamic-section flight-schedule-subgroup'; 
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'dynamic-section flight-schedule-subgroup';
         groupDiv.id = groupId;
         groupDiv.dataset.groupIndex = groupIndex;
         groupDiv.dataset.subGroupIndex = subGroupIndex;
@@ -449,7 +451,7 @@
                     <tfoot><tr><td colspan="8" class="border p-2"><button type="button" class="add-flight-row-to-subgroup bg-custom-green text-white px-3 py-1 rounded hover:bg-opacity-90 transition"><i class="fas fa-plus mr-1"></i> 행 추가</button></td></tr></tfoot>
                 </table>
             </div>`;
-        container.appendChild(groupDiv); 
+        container.appendChild(groupDiv);
         const tbody = groupDiv.querySelector(`#${tableBodyId}`);
         if (sourceSubgroupData && sourceSubgroupData.rows && sourceSubgroupData.rows.length > 0) {
             sourceSubgroupData.rows.forEach(rowData => addFlightRowForSubgroup(tbody, groupIndex, subGroupIndex, rowData.flightNum, rowData.depDate, rowData.originCity, rowData.depTime, rowData.arrDate, rowData.destCity, rowData.arrTime));
@@ -463,38 +465,38 @@
         });
         groupDiv.addEventListener('paste', (e) => { if (e.target.matches('.flight-schedule-input')) handlePasteToFlightTableForSubgroup(e, groupIndex, subGroupIndex); });
     }
-    function addFlightRowForSubgroup(tbodyElement, groupIndex, subGroupIndex, flightNum = "", depDate = "", originCity = "", depTime = "", arrDate = "", destCity = "", arrTime = "") { 
+    function addFlightRowForSubgroup(tbodyElement, groupIndex, subGroupIndex, flightNum = "", depDate = "", originCity = "", depTime = "", arrDate = "", destCity = "", arrTime = "") {
         if (!tbodyElement) return null; const tr = document.createElement('tr');
         tr.innerHTML = `<td class="border p-2"><input type="text" name="dep_trans_flight_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${flightNum}" placeholder="ZE 561"></td><td class="border p-2"><input type="text" name="start_day_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${depDate}" placeholder="07월 09일"></td><td class="border p-2"><input type="text" name="dep_start_city_cd_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${originCity}" placeholder="인천"></td><td class="border p-2"><input type="text" name="dep_start_time_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${depTime}" placeholder="20:55"></td><td class="border p-2"><input type="text" name="arrival_day_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${arrDate}" placeholder="07월 09일"></td><td class="border p-2"><input type="text" name="dep_end_city_cd_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${destCity}" placeholder="나트랑"></td><td class="border p-2"><input type="text" name="dep_end_time_group[${groupIndex}][${subGroupIndex}][]" class="w-full border-0 focus:ring-0 flight-schedule-input" value="${arrTime}" placeholder="23:55"></td><td class="border p-2 text-center"><button type="button" class="delete-row text-red-500 hover:text-red-700" title="삭제"><i class="fas fa-trash"></i></button></td>`;
         tbodyElement.appendChild(tr); return tr;
     }
-    function handlePasteToFlightTableForSubgroup(event, groupIndex, subGroupIndex) { 
-        const targetInput = event.target; if (!targetInput.matches('.flight-schedule-input')) return; 
-        event.preventDefault(); 
-        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain'); 
+    function handlePasteToFlightTableForSubgroup(event, groupIndex, subGroupIndex) {
+        const targetInput = event.target; if (!targetInput.matches('.flight-schedule-input')) return;
+        event.preventDefault();
+        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain');
         const rowsOfData = pasteData.split(/\r\n|\n|\r/);
-        let currentRowElement = targetInput.closest('tr'); 
-        let currentCellIndexInRow = Array.from(currentRowElement.cells).indexOf(targetInput.closest('td')); 
+        let currentRowElement = targetInput.closest('tr');
+        let currentCellIndexInRow = Array.from(currentRowElement.cells).indexOf(targetInput.closest('td'));
         const currentTbody = currentRowElement.closest('tbody.flight-table-body-subgroup');
-        rowsOfData.forEach((rowText) => { 
-            if (!rowText.trim()) return; 
+        rowsOfData.forEach((rowText) => {
+            if (!rowText.trim()) return;
             const cellsOfData = rowText.split('\t');
             if (!currentRowElement) {
-                currentRowElement = addFlightRowForSubgroup(currentTbody, groupIndex, subGroupIndex); 
-                if (!currentRowElement) return; 
-                currentCellIndexInRow = 0; 
+                currentRowElement = addFlightRowForSubgroup(currentTbody, groupIndex, subGroupIndex);
+                if (!currentRowElement) return;
+                currentCellIndexInRow = 0;
             }
-            const inputFieldsInCurrentRow = currentRowElement.querySelectorAll('.flight-schedule-input'); 
+            const inputFieldsInCurrentRow = currentRowElement.querySelectorAll('.flight-schedule-input');
             let dataCellIdx = 0;
-            for (let i = currentCellIndexInRow; i < inputFieldsInCurrentRow.length && dataCellIdx < cellsOfData.length; i++) { 
-                inputFieldsInCurrentRow[i].value = cellsOfData[dataCellIdx].trim(); dataCellIdx++; 
+            for (let i = currentCellIndexInRow; i < inputFieldsInCurrentRow.length && dataCellIdx < cellsOfData.length; i++) {
+                inputFieldsInCurrentRow[i].value = cellsOfData[dataCellIdx].trim(); dataCellIdx++;
             }
-            const nextTRElement = currentRowElement.nextElementSibling; 
-            currentRowElement = (nextTRElement && nextTRElement.cells.length > 0) ? nextTRElement : null; 
-            currentCellIndexInRow = 0; 
+            const nextTRElement = currentRowElement.nextElementSibling;
+            currentRowElement = (nextTRElement && nextTRElement.cells.length > 0) ? nextTRElement : null;
+            currentCellIndexInRow = 0;
         });
     }
-    function initInclusionExclusionForGroup(quoteGroupElement, groupIndex, sourceData = null) { 
+    function initInclusionExclusionForGroup(quoteGroupElement, groupIndex, sourceData = null) {
         const includedTextarea = quoteGroupElement.querySelector(`textarea[name="included_items_textarea[${groupIndex}]"]`);
         const excludedTextarea = quoteGroupElement.querySelector(`textarea[name="excluded_items_textarea[${groupIndex}]"]`);
         if (sourceData && sourceData.inclusionExclusion) {
@@ -503,60 +505,60 @@
             if (excludedTextarea && typeof ieData.excludedTextarea !== 'undefined') excludedTextarea.value = ieData.excludedTextarea;
         }
     }
-    function initItinerarySummaryForGroup(quoteGroupElement, groupIndex, sourceItineraryRows = null) { 
+    function initItinerarySummaryForGroup(quoteGroupElement, groupIndex, sourceItineraryRows = null) {
         const addRowButton = quoteGroupElement.querySelector('.add-itinerary-row-to-group');
         const tbody = quoteGroupElement.querySelector(`#itineraryTableBody_${groupIndex}`);
-        tbody.innerHTML = ''; 
+        tbody.innerHTML = '';
         if (sourceItineraryRows && sourceItineraryRows.length > 0) {
             sourceItineraryRows.forEach(rowData => addItineraryRowForGroup(tbody, groupIndex, rowData.dayNo, rowData.dayDate, rowData.sCity, rowData.eCity, rowData.hotel, rowData.traffic, rowData.bigo));
         }
         if (addRowButton && tbody) addRowButton.addEventListener('click', () => addItineraryRowForGroup(tbody, groupIndex));
         if (tbody) tbody.addEventListener('paste', (e) => handlePasteToItineraryTableForGroup(e, tbody, groupIndex));
     }
-    function addItineraryRowForGroup(tbodyElement, groupIndex, dayNoVal = "", dayDateVal = "", sCityVal = "", eCityVal = "", hotelVal = "", trafficVal = "", bigoVal = "") { 
-        if (!tbodyElement) return null; 
+    function addItineraryRowForGroup(tbodyElement, groupIndex, dayNoVal = "", dayDateVal = "", sCityVal = "", eCityVal = "", hotelVal = "", trafficVal = "", bigoVal = "") {
+        if (!tbodyElement) return null;
         const tr = document.createElement('tr');
         tr.innerHTML = `<td class="border p-2"><input type="text" name="schdule_no[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${dayNoVal}" placeholder="1"></td><td class="border p-2"><input type="text" name="schdule_day[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${dayDateVal}" placeholder="12월 28일"></td><td class="border p-2"><input type="text" name="schdule_scity[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${sCityVal}" placeholder="인천"></td><td class="border p-2"><input type="text" name="schdule_ecity[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${eCityVal}" placeholder="푸꾸옥"></td><td class="border p-2"><input type="text" name="schdule_hotel[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${hotelVal}" placeholder="버고호텔"></td><td class="border p-2"><input type="text" name="schdule_traffic[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${trafficVal}" placeholder="항공"></td><td class="border p-2"><input type="text" name="schdule_bigo[${groupIndex}][]" class="w-full border-0 focus:ring-0 itinerary-schedule-input" value="${bigoVal}"></td><td class="border p-2 text-center"><button type="button" class="delete-row text-red-500 hover:text-red-700" title="삭제"><i class="fas fa-trash"></i></button></td>`;
         tbodyElement.appendChild(tr); return tr;
     }
-    function handlePasteToItineraryTableForGroup(event, tbodyElement, groupIndex) { 
-        const targetInput = event.target; if (!targetInput.matches('.itinerary-schedule-input')) return; 
-        event.preventDefault(); 
-        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain'); 
+    function handlePasteToItineraryTableForGroup(event, tbodyElement, groupIndex) {
+        const targetInput = event.target; if (!targetInput.matches('.itinerary-schedule-input')) return;
+        event.preventDefault();
+        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain');
         const rowsOfData = pasteData.split(/\r\n|\n|\r/);
-        let currentRowElement = targetInput.closest('tr'); 
+        let currentRowElement = targetInput.closest('tr');
         let currentCellIndexInRow = Array.from(currentRowElement.cells).indexOf(targetInput.closest('td'));
-        rowsOfData.forEach((rowText) => { 
-            if (!rowText.trim()) return; 
+        rowsOfData.forEach((rowText) => {
+            if (!rowText.trim()) return;
             const cellsOfData = rowText.split('\t');
-            if (!currentRowElement) { 
-                currentRowElement = addItineraryRowForGroup(tbodyElement, groupIndex); 
-                if (!currentRowElement) return; 
-                currentCellIndexInRow = 0; 
+            if (!currentRowElement) {
+                currentRowElement = addItineraryRowForGroup(tbodyElement, groupIndex);
+                if (!currentRowElement) return;
+                currentCellIndexInRow = 0;
             }
-            const inputFieldsInCurrentRow = currentRowElement.querySelectorAll('.itinerary-schedule-input'); 
+            const inputFieldsInCurrentRow = currentRowElement.querySelectorAll('.itinerary-schedule-input');
             let dataCellIdx = 0;
-            for (let i = currentCellIndexInRow; i < inputFieldsInCurrentRow.length && dataCellIdx < cellsOfData.length; i++) { 
-                inputFieldsInCurrentRow[i].value = cellsOfData[dataCellIdx].trim(); dataCellIdx++; 
+            for (let i = currentCellIndexInRow; i < inputFieldsInCurrentRow.length && dataCellIdx < cellsOfData.length; i++) {
+                inputFieldsInCurrentRow[i].value = cellsOfData[dataCellIdx].trim(); dataCellIdx++;
             }
-            const nextTRElement = currentRowElement.nextElementSibling; 
-            currentRowElement = (nextTRElement && nextTRElement.cells.length > 0) ? nextTRElement : null; 
-            currentCellIndexInRow = 0; 
+            const nextTRElement = currentRowElement.nextElementSibling;
+            currentRowElement = (nextTRElement && nextTRElement.cells.length > 0) ? nextTRElement : null;
+            currentCellIndexInRow = 0;
         });
     }
 
     // ----- 상세 일정표 관련 함수들 -----
     function initItineraryDetailForQuoteGroup(quoteGroupElement, groupIndex, sourceData = null) {
         const detailedItineraryContainer = quoteGroupElement.querySelector(`#detailedItineraryGroupsContainer_${groupIndex}`);
-        if (!detailedItineraryContainer) return; 
-        detailedItineraryContainer.innerHTML = ''; 
+        if (!detailedItineraryContainer) return;
+        detailedItineraryContainer.innerHTML = '';
         if (sourceData && sourceData.detailedItineraryGroups && sourceData.detailedItineraryGroups.length > 0) {
-            detailedItineraryDayGroupCounters[groupIndex] = 0; 
+            detailedItineraryDayGroupCounters[groupIndex] = 0;
             sourceData.detailedItineraryGroups.forEach(dayGroupData => {
                 const dayGroupEl = createDetailedItineraryDayGroupForQuoteGroup(groupIndex, detailedItineraryContainer, dayGroupData.title);
                 if (dayGroupEl && dayGroupData.rows && dayGroupData.rows.length > 0) {
                     const tbody = dayGroupEl.querySelector('.detailed-itinerary-day-group-table-body');
-                    tbody.innerHTML = ''; 
+                    tbody.innerHTML = '';
                     dayGroupData.rows.forEach(rowData => addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, groupIndex, dayGroupEl.dataset.dayGroupIndex, rowData.time, rowData.schedule, rowData.remark));
                 }
             });
@@ -564,7 +566,7 @@
         // 넘버링은 createQuoteGroup 에서 처리 (sourceData 있을 때, 없을 때 모두)
     }
     function createDetailedItineraryDayGroupForQuoteGroup(quoteGroupIndex, containerElement, title = "") {
-        const dayGroupUniqueIndex = detailedItineraryDayGroupCounters[quoteGroupIndex]++; 
+        const dayGroupUniqueIndex = detailedItineraryDayGroupCounters[quoteGroupIndex]++;
         const dayGroupId = `detailedItineraryDayGroup_${quoteGroupIndex}_${dayGroupUniqueIndex}`;
         const tableBodyId = `detailedItineraryDayGroupTableBody_${quoteGroupIndex}_${dayGroupUniqueIndex}`;
         const groupTitleInputName = `detailed_itinerary_day_group_title[${quoteGroupIndex}][${dayGroupUniqueIndex}]`;
@@ -572,7 +574,7 @@
         groupDiv.className = 'detailed-itinerary-day-group';
         groupDiv.id = dayGroupId;
         groupDiv.dataset.quoteGroupIndex = quoteGroupIndex;
-        groupDiv.dataset.dayGroupIndex = dayGroupUniqueIndex; 
+        groupDiv.dataset.dayGroupIndex = dayGroupUniqueIndex;
         groupDiv.innerHTML = `
             <button type="button" class="delete-detailed-itinerary-day-group-btn" title="이 일정 그룹 삭제"><i class="fas fa-trash-alt"></i></button>
             <input type="text" name="${groupTitleInputName}" class="detailed-itinerary-group-title-input" placeholder="" value="${title}">
@@ -596,7 +598,10 @@
             </div>
         `;
         containerElement.appendChild(groupDiv);
-        addDetailedItineraryRowToDayGroupForQuoteGroup(groupDiv.querySelector(`#${tableBodyId}`), quoteGroupIndex, dayGroupUniqueIndex);
+        // 새 그룹 생성 시 기본 행 추가 (sourceData에서 복원할 때는 initItineraryDetailForQuoteGroup에서 처리)
+        if (!title && !(groupDiv.querySelector(`#${tableBodyId}`).hasChildNodes())) {
+             addDetailedItineraryRowToDayGroupForQuoteGroup(groupDiv.querySelector(`#${tableBodyId}`), quoteGroupIndex, dayGroupUniqueIndex);
+        }
         return groupDiv;
     }
     function updateDetailedItineraryGroupNumbering(quoteGroupIndex) {
@@ -628,9 +633,12 @@
         const cellsInCurrentRow = Array.from(currentTrElement.querySelectorAll('.detailed-itinerary-day-input'));
         let currentCellIndex = cellsInCurrentRow.indexOf(targetEditableDiv); if (currentCellIndex === -1) currentCellIndex = 0;
         linesFromPaste.forEach((line, lineIndex) => {
-            if (!line.trim() && linesFromPaste.length === 1 && lineIndex === 0) return;
+            if (!line.trim() && linesFromPaste.length === 1 && lineIndex === 0) { // 단일 빈 줄 붙여넣기 시 아무것도 안함
+                 targetEditableDiv.innerText = line.trim(); // 현재 셀 비우기
+                 return;
+            }
             const cellsFromLine = line.split('\t');
-            if (lineIndex > 0) {
+            if (lineIndex > 0 || !currentTrElement) { // 첫 줄이 아니거나, 현재 행이 없으면 새 행 추가
                 currentTrElement = addDetailedItineraryRowToDayGroupForQuoteGroup(currentTbodyElement, quoteGroupIndex, dayGroupIndex);
                 if (!currentTrElement) return; currentCellIndex = 0;
             }
@@ -640,6 +648,12 @@
                 if (targetDivsInRow[i]) targetDivsInRow[i].innerText = cellsFromLine[pasteCellIdx].trim();
                 pasteCellIdx++;
             }
+            // 다음 줄 처리를 위해 현재 행을 null로 만들어 새 행을 생성하도록 유도 (또는 다음 행으로 이동)
+            if (lineIndex < linesFromPaste.length -1) { // 마지막 줄이 아니면
+                currentTrElement = currentTrElement.nextElementSibling; // 다음 행으로 이동 시도
+                currentCellIndex = 0; // 다음 행의 첫번째 셀부터 시작
+            }
+
         });
     }
 
@@ -654,21 +668,21 @@
             const groupTitleInput = group.querySelector('.detailed-itinerary-group-title-input');
             let dayInfo = ""; let userTitle = "";
             if (groupTitleInput) {
-                dayInfo = groupTitleInput.placeholder.trim(); 
-                userTitle = groupTitleInput.value.trim();    
+                dayInfo = groupTitleInput.placeholder.trim();
+                userTitle = groupTitleInput.value.trim();
             }
             let combinedTitle = dayInfo;
-            if (userTitle) combinedTitle += (dayInfo ? " - " : "") + userTitle; 
+            if (userTitle) combinedTitle += (dayInfo ? " - " : "") + userTitle;
             combinedTitle = combinedTitle.replace(/\n/g, '<br>');
             let groupTableRowsHtml = "";
             const rows = group.querySelectorAll('.detailed-itinerary-day-group-table-body tr');
             let hasRowsInGroup = false;
             rows.forEach(row => {
                 const editableDivs = row.querySelectorAll('.detailed-itinerary-day-input');
-                const time = editableDivs[0] ? editableDivs[0].innerText.trim() : ''; 
+                const time = editableDivs[0] ? editableDivs[0].innerText.trim() : '';
                 const schedule = editableDivs[1] ? editableDivs[1].innerText.trim() : '';
                 const remark = editableDivs[2] ? editableDivs[2].innerText.trim() : '';
-                if (time || schedule || remark) { 
+                if (time || schedule || remark) {
                     hasRowsInGroup = true;
                     groupTableRowsHtml += `<tr style="font-size:12px; color:#4f4f4f; font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;">
                         <td style="border:1px solid #e0e0e0; padding:8px; vertical-align: top; width:15%; text-align:center;">${time.replace(/\n/g, '<br>')}</td>
@@ -676,7 +690,7 @@
                         <td style="border:1px solid #e0e0e0; padding:8px; vertical-align: top; width:25%; text-align:center;">${remark.replace(/\n/g, '<br>')}</td></tr>`;
                 }
             });
-            if (combinedTitle || hasRowsInGroup) { 
+            if (combinedTitle || hasRowsInGroup) {
                 if (combinedTitle) allGroupsHtml += `<tr><td style="padding:15px 0 5px 0; font-weight:bold; font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;font-size:13px; color:#333;">${combinedTitle}</td></tr>`;
                 if (hasRowsInGroup) {
                     allGroupsHtml += `<tr><td><table class="data-table detailed-itinerary-data-table" style="width:100%; border-collapse:collapse; margin-bottom:15px;">
@@ -691,14 +705,14 @@
         if (!allGroupsHtml.trim()) return `<table style="width:100%;"><tbody><tr><td style="border:1px solid #f37021; padding:10px; text-align:center; color:#777;">입력된 상세 일정이 없습니다.</td></tr></tbody></table>`;
         return `<table width="100%" style="border-spacing:0; border-collapse:collapse;"><tbody>${allGroupsHtml}</tbody></table>`;
     }
-    function syncAllContentEditablesToTextareas() { 
+    function syncAllContentEditablesToTextareas() {
         document.querySelectorAll('.quote-group-section').forEach(quoteGroupElement => {
             const groupIndex = quoteGroupElement.dataset.groupIndex;
             const hiddenTextarea = document.getElementById(`goods_schedule_hidden_${groupIndex}`);
             if (hiddenTextarea) hiddenTextarea.value = generateHTMLFromDetailedItinerary(groupIndex);
         });
     }
-    function _getPreviewTemplateHeaderHTML() { 
+    function _getPreviewTemplateHeaderHTML() {
         return `
             <tr>
                 <td style="text-align:center;">
@@ -708,7 +722,7 @@
             </tr>
         `;
     }
-    function _getPreviewTemplateFooterHTML() { 
+    function _getPreviewTemplateFooterHTML() {
         return `
             <tr>
                 <td width="710" style="background-color:#f4f4f4;padding:10px;margin:0; padding-top:20px;" class="footer-notice">
@@ -729,7 +743,7 @@
             </tr>
         `;
     }
-    function _generatePreviewBasicInfoHTML_Template(form) { 
+    function _generatePreviewBasicInfoHTML_Template(form) {
         const custName = form.custname.value || "고객";
         const introTextRaw = document.getElementById('introText').value || `고객님께서 문의하신 상품에 대한 일정 및 견적 안내입니다.\n더 특별하고 소중한 추억을 만들어 드리기 위해 노력하겠습니다.\n감사합니다.\n\n`;
         const introText = introTextRaw.replace(/\n/g, '<br>');
@@ -791,18 +805,18 @@
     function _generatePreviewForSingleQuoteGroupHTML_Template(quoteGroupElement, groupIndex, totalQuoteGroups) {
         let groupHTML = "";
         const quoteGroupTitleEl = quoteGroupElement.querySelector(`input[name="quote_group_title[${groupIndex}]"]`);
-        const quoteGroupTitle = quoteGroupTitleEl ? quoteGroupTitleEl.value.trim() : ""; 
+        const quoteGroupTitle = quoteGroupTitleEl ? quoteGroupTitleEl.value.trim() : "";
         const contentId = `previewQuoteGroupContent_${groupIndex}`;
         const iconId = `previewQuoteGroupIcon_${groupIndex}`;
         const isSingleGroup = totalQuoteGroups === 1;
-        const initialDisplay = isSingleGroup ? 'table-row-group' : 'none'; 
-        const initialIconClass = 'fa-plus-square'; 
+        const initialDisplay = isSingleGroup ? 'table-row-group' : 'none';
+        const initialIconClass = 'fa-plus-square';
         const showToggleIcon = !isSingleGroup;
         let titleCellHTML = "";
         if (quoteGroupTitle || showToggleIcon) {
             titleCellHTML = `
-                <td style="padding-top:25px; padding-bottom: 10px; font-weight:normal; font-size:12px; color:#1a6f2b; border-bottom: 2px solid #1a6f2b; ${showToggleIcon ? 'cursor:pointer;' : ''}" 
-                    class="quote-group-main-title" 
+                <td style="padding-top:25px; padding-bottom: 10px; font-weight:normal; font-size:12px; color:#1a6f2b; border-bottom: 2px solid #1a6f2b; ${showToggleIcon ? 'cursor:pointer;' : ''}"
+                    class="quote-group-main-title"
                     ${showToggleIcon ? `onclick="togglePreviewGroupContent('${contentId}', '${iconId}')"` : ''}>
                     ${quoteGroupTitle}
                     ${showToggleIcon ? `<i id="${iconId}" class="fas ${initialIconClass} preview-toggle-icon"></i>` : ''}
@@ -815,9 +829,9 @@
         const flightHTML = _generatePreviewFlightSubgroupsHTML_ForQuoteGroup(quoteGroupElement, groupIndex);
         const itineraryHTML = _generatePreviewItineraryHTML_ForQuoteGroup(quoteGroupElement, groupIndex);
         const groupContent = priceHTML + inclusionHTML + exclusionHTML + flightHTML + itineraryHTML;
-        if (groupContent.trim() !== "" || (isSingleGroup && !titleCellHTML) ) { 
+        if (groupContent.trim() !== "" || (isSingleGroup && !titleCellHTML) ) {
             groupHTML += `<tbody id="${contentId}" style="display: ${initialDisplay};">${groupContent}</tbody>`;
-        } else if (titleCellHTML && groupContent.trim() === "") { 
+        } else if (titleCellHTML && groupContent.trim() === "") {
              groupHTML += `<tbody id="${contentId}" style="display: ${initialDisplay};"><tr><td style="padding:10px; text-align:center; color:#777;">(세부 내용 없음)</td></tr></tbody>`;
         }
         if (groupHTML.trim() === "" && !isSingleGroup) return "";
@@ -826,7 +840,7 @@
     }
     function _generatePreviewPriceSubgroupsHTML_ForQuoteGroup(quoteGroupElement, groupIndex) {
         const priceSubgroups = quoteGroupElement.querySelectorAll('.price-subgroup'); if (priceSubgroups.length === 0) return "";
-        let allSubgroupsContent = ""; let hasAnyPriceData = false; 
+        let allSubgroupsContent = ""; let hasAnyPriceData = false;
         priceSubgroups.forEach((subgroup, subIterationIdx) => {
             const subGroupIndex = subgroup.dataset.subGroupIndex; if (subGroupIndex === undefined) return;
             const subgroupTitleInputElement = subgroup.querySelector(`input[name="price_subgroup_title[${groupIndex}][${subGroupIndex}]"]`);
@@ -836,7 +850,7 @@
                 const title = row.querySelector(`input[name="p_title[${groupIndex}][${subGroupIndex}][]"]`)?.value || '';
                 const perPrice = row.querySelector(`input[name="p_perprice[${groupIndex}][${subGroupIndex}][]"]`)?.value || '';
                 const number = row.querySelector(`input[name="p_number[${groupIndex}][${subGroupIndex}][]"]`)?.value || '';
-                const totalPriceValue = row.querySelector(`input[name="p_totalprice[${groupIndex}][${subGroupIndex}][]"]`)?.value || '0'; 
+                const totalPriceValue = row.querySelector(`input[name="p_totalprice[${groupIndex}][${subGroupIndex}][]"]`)?.value || '0';
                 const bigo = row.querySelector(`input[name="p_bigo[${groupIndex}][${subGroupIndex}][]"]`)?.value || '';
                 const numericPerPrice = parseFloat(perPrice) || 0; const numericTotalPrice = parseFloat(totalPriceValue.replace(/,/g, '')) || 0;
                 if (numericTotalPrice !== 0) {
@@ -845,7 +859,7 @@
                 }
             });
             if (subgroupTitleValue.trim() || hasDataInThisSubgroup) {
-                hasAnyPriceData = true; 
+                hasAnyPriceData = true;
                 if (allSubgroupsContent.trim() !== "" && subIterationIdx > 0) allSubgroupsContent += `<tr><td style="padding-top: 15px;"><hr style="border: none; border-top: 1px dashed #ccc;"></td></tr>`;
                 if (subgroupTitleValue.trim()) allSubgroupsContent += `<tr><td style="padding-top:10px; padding-bottom: 5px; font-weight:bold; font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;font-size:12px;" class="price-group-title">${subgroupTitleValue}</td></tr>`;
                 if (hasDataInThisSubgroup) {
@@ -859,7 +873,7 @@
         if (!hasAnyPriceData) return "";
         return `<tr><td style="padding-top:20px"><table style="width:100%;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/icon_01.png" style="vertical-align: middle;"> <strong style="vertical-align: middle;">요금안내</strong></p></td></tr><tr><td style="border:1px solid #f37021; padding:10px;" class="section-content-box"><table width="100%" style="border-spacing: 0; border-collapse: collapse;"><tbody>${allSubgroupsContent}</tbody></table></td></tr></tbody></table></td></tr>`;
     }
-    function _generatePreviewInclusionsExclusionsHTML_ForQuoteGroup(quoteGroupElement, groupIndex, type) { 
+    function _generatePreviewInclusionsExclusionsHTML_ForQuoteGroup(quoteGroupElement, groupIndex, type) {
         const title = type === 'included' ? '포함사항' : '불포함사항';
         const icon = type === 'included' ? 'icon_06.png' : 'icon_07.png';
         const textarea = quoteGroupElement.querySelector(`textarea[name="${type === 'included' ? `included_items_textarea[${groupIndex}]` : `excluded_items_textarea[${groupIndex}]`}"]`);
@@ -867,14 +881,14 @@
         if (!text) return "";
         return `<tr><td style="padding-top:20px"><table style="width:100%;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/${icon}"> <span style="vertical-align: middle;"><strong>${title}</strong></span></p></td></tr><tr><td style="border:1px solid #f37021;padding:10px;font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;font-size:12px;color:#666; line-height: 1.6;" class="section-content-box inclusion-exclusion-text"><div>${text.replace(/\n/g, '<br>')}</div></td></tr></tbody></table></td></tr>`;
     }
-    function _generatePreviewFlightSubgroupsHTML_ForQuoteGroup(quoteGroupElement, groupIndex) { 
+    function _generatePreviewFlightSubgroupsHTML_ForQuoteGroup(quoteGroupElement, groupIndex) {
         const flightSubgroups = quoteGroupElement.querySelectorAll('.flight-schedule-subgroup'); if (flightSubgroups.length === 0) return "";
-        let allSubgroupsContent = ""; let hasAnyFlightDataInGroup = false; 
-        flightSubgroups.forEach((subgroup, subIterationIdx) => { 
-            const subGroupIndex = subgroup.dataset.subGroupIndex; if (subGroupIndex === undefined) return; 
-            const subgroupTitleInputElement = subgroup.querySelector(`input[name="flight_group_title[${groupIndex}][${subGroupIndex}]"]`); 
+        let allSubgroupsContent = ""; let hasAnyFlightDataInGroup = false;
+        flightSubgroups.forEach((subgroup, subIterationIdx) => {
+            const subGroupIndex = subgroup.dataset.subGroupIndex; if (subGroupIndex === undefined) return;
+            const subgroupTitleInputElement = subgroup.querySelector(`input[name="flight_group_title[${groupIndex}][${subGroupIndex}]"]`);
             let subgroupTitleValue = subgroupTitleInputElement ? subgroupTitleInputElement.value.trim() : "";
-            let flightTableRowsHtml = ""; const flightRowsInSubgroup = subgroup.querySelectorAll('.flight-table-body-subgroup tr'); let hasFlightDataInSubgroup = false; 
+            let flightTableRowsHtml = ""; const flightRowsInSubgroup = subgroup.querySelectorAll('.flight-table-body-subgroup tr'); let hasFlightDataInSubgroup = false;
             flightRowsInSubgroup.forEach(row => {
                 const inputs = row.querySelectorAll('input.flight-schedule-input');
                 const flight = inputs[0]?.value.trim() || ''; const depDay = inputs[1]?.value.trim() || ''; const fromCity = inputs[2]?.value.trim() || ''; const depTime = inputs[3]?.value.trim() || ''; const arrDay = inputs[4]?.value.trim() || ''; const toCity = inputs[5]?.value.trim() || ''; const arrTime = inputs[6]?.value.trim() || '';
@@ -892,7 +906,7 @@
                 } else if (subgroupTitleValue) allSubgroupsContent += `<tr><td style="padding: 5px 0; font-size: 10px; color: #777;">(세부 항공 스케줄 없음)</td></tr>`;
             }
         });
-        if (!hasAnyFlightDataInGroup) return ""; 
+        if (!hasAnyFlightDataInGroup) return "";
         return `<tr><td style="padding-top:20px"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/icon_04.png"> <span style="vertical-align: middle;"><strong>항공스케줄</strong></span></p></td></tr><tr><td style="border:1px solid #f37021; padding:10px;" class="section-content-box"><table width="100%" style="border-spacing: 0; border-collapse: collapse;"><tbody>${allSubgroupsContent}</tbody></table></td></tr></tbody></table></td></tr>`;
     }
     function _generatePreviewItineraryHTML_ForQuoteGroup(quoteGroupElement, groupIndex) {
@@ -900,8 +914,8 @@
         let hasContent = false; let itinerarySummaryTableContent = ""; let hasSummaryData = false;
         const itineraryTableRows = quoteGroupElement.querySelectorAll(`#itineraryTableBody_${groupIndex} tr`);
         itineraryTableRows.forEach(row => {
-            const values = Array.from(row.querySelectorAll('.itinerary-schedule-input')).map(input => input?.value.trim() || ''); 
-            if (values.some(val => val)) { 
+            const values = Array.from(row.querySelectorAll('.itinerary-schedule-input')).map(input => input?.value.trim() || '');
+            if (values.some(val => val)) {
                 hasSummaryData = true;
                 itinerarySummaryTableContent += `<tr style="text-align:center; background:white; font-size:10px;"><td style="border:1px solid #EEECE1; padding: 4px 3px;">${values[0]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[1]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[2]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[3]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[4]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[5]}</td><td style="border:1px solid #EEECE1; padding: 4px 3px; border-left: none;">${values[6]}</td></tr>`;
             }
@@ -915,20 +929,157 @@
         if (detailedItineraryHtml && !detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.")) {
              hasContent = true;
              detailedHtmlPart = `<tr><td style="padding:10px;font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;font-size:12px; line-height: 1.6;" class="section-content-box detailed-itinerary-text">${hasSummaryData ? '<p style="font-weight:bold; margin-top:15px; margin-bottom:5px; font-size:12px;">상세 일정</p>' : ''}${detailedItineraryHtml}</td></tr>`;
-        } else if (detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.") && !hasSummaryData) { 
-            detailedHtmlPart = `<tr><td style="padding:10px; text-align:center; color:#777; border:1px solid #f37021;">입력된 일정이 없습니다.</td></tr>`; hasContent = true; 
+        } else if (detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.") && !hasSummaryData) {
+            detailedHtmlPart = `<tr><td style="padding:10px; text-align:center; color:#777; border:1px solid #f37021;">입력된 일정이 없습니다.</td></tr>`; hasContent = true;
         }
-        if (!hasContent) return ""; 
+        if (!hasContent) return "";
         return `<tr><td style="padding-top:20px"><table style="width:100%;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/icon_05.png" style="vertical-align:middle;"> <span style="vertical-align: middle;"><strong>일정&기타사항</strong></span></p></td></tr><tr><td style="border:1px solid #f37021;"><table width="100%"><tbody>${summaryHtmlPart}${(summaryHtmlPart && detailedHtmlPart && !detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.")) ? '<tr><td style="padding: 5px 10px;"><hr style="border:0; border-top:1px dashed #ccc;"></td></tr>' : ''}${detailedHtmlPart}</tbody></table></td></tr></tbody></table></td></tr>`;
     }
-    function getMobileStylesForDownload() { 
+    function getMobileStylesForDownload() {
         return `<style> @media screen and (max-width: 760px) { body { padding: 5px !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table[style*="width:710px"] { width: 100% !important; min-width: 300px; } img { max-width: 100%; height: auto !important; } td[style*="padding:20px 15px 40px"] { padding: 10px 8px 20px !important; } .quote-group-main-title { font-size: 14px !important; } .section-title, .price-group-title, .flight-group-title, .basic-info-text p, .traveler-info-text .info-p, .inclusion-exclusion-text div, .detailed-itinerary-text, .footer-notice td, .footer-address { font-size: 11px !important; } .detailed-itinerary-text table, .detailed-itinerary-text tr, .detailed-itinerary-text td, .detailed-itinerary-text th, .detailed-itinerary-text p, .detailed-itinerary-text span, .detailed-itinerary-text div, .detailed-itinerary-text li, .detailed-itinerary-text b, .detailed-itinerary-text strong { font-size: 11px !important; line-height: 1.4 !important; } .detailed-itinerary-text table[class*="data-table"] th, .detailed-itinerary-text table[class*="data-table"] td { padding: 3px 2px !important; word-break: break-all !important; white-space: normal !important; } .section-title img { width: 16px !important; height: 16px !important; vertical-align: middle !important; } .section-title strong { vertical-align: middle !important; } td.section-content-box, td.section-content-box p, td.section-content-box div { font-size: 11px !important; line-height: 1.5 !important; } .product-agent-info-table td, .price-details-table th, .price-details-table td, .flight-details-table th, .flight-details-table td, .itinerary-summary-table th, .itinerary-summary-table td, .flight-remark { font-size: 9px !important; padding: 3px 2px !important; word-break: break-all !important; white-space: normal !important; } .emp-details { padding-left: 0px !important; display: block !important; line-height: 1.4 !important; } .product-agent-info-table td[style*="width:100px"] { width: auto !important; min-width: 60px; padding-right: 5px !important; } } </style>`;
     }
+
+    // ----- 데이터 저장/불러오기 함수 -----
+    function getAllEditorDataAsObject() {
+        const data = {
+            globalSettings: {
+                customerName: document.getElementById('customerName').value,
+                customerEmail: document.getElementById('customerEmail').value,
+                custcmail: document.getElementById('custcmail').value,
+                subject: document.getElementById('subject').value,
+                introText: document.getElementById('introText').value,
+                goodnm: document.getElementById('goodnm').value,
+                travelerInfoText: document.getElementById('travelerInfoText').value,
+                empnm: document.getElementById('empnm').value,
+                empmail: document.getElementById('empmail').value,
+                emptel: document.getElementById('emptel').value,
+            },
+            quoteGroups: []
+        };
+
+        document.querySelectorAll('#quoteGroupsContainer .quote-group-section').forEach(quoteGroupElement => {
+            const groupIndex = quoteGroupElement.dataset.groupIndex;
+            const sourceGroupData = {
+                groupTitle: quoteGroupElement.querySelector(`input[name="quote_group_title[${groupIndex}]"]`).value,
+                priceSubgroups: [],
+                inclusionExclusion: {
+                    includedTextarea: quoteGroupElement.querySelector(`textarea[name="included_items_textarea[${groupIndex}]"]`)?.value || '',
+                    excludedTextarea: quoteGroupElement.querySelector(`textarea[name="excluded_items_textarea[${groupIndex}]"]`)?.value || ''
+                },
+                flightSubgroups: [],
+                itinerarySummaryRows: [],
+                detailedItineraryGroups: []
+            };
+
+            // 요금 소그룹 데이터 수집
+            quoteGroupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => {
+                const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+                const priceSubgroup = {
+                    title: subgroupEl.querySelector(`input[name="price_subgroup_title[${groupIndex}][${subGroupIdx}]"]`).value,
+                    rows: []
+                };
+                subgroupEl.querySelectorAll('.price-table-body tr').forEach(rowEl => {
+                    priceSubgroup.rows.push({
+                        title: rowEl.querySelector(`input[name="p_title[${groupIndex}][${subGroupIdx}][]"]`).value,
+                        perPrice: rowEl.querySelector(`input[name="p_perprice[${groupIndex}][${subGroupIdx}][]"]`).value,
+                        number: rowEl.querySelector(`input[name="p_number[${groupIndex}][${subGroupIdx}][]"]`).value,
+                        // totalPrice는 계산되므로 저장 안함
+                        bigo: rowEl.querySelector(`input[name="p_bigo[${groupIndex}][${subGroupIdx}][]"]`).value,
+                    });
+                });
+                sourceGroupData.priceSubgroups.push(priceSubgroup);
+            });
+
+            // 항공 스케줄 소그룹 데이터 수집
+            quoteGroupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => {
+                const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+                const flightSubgroup = {
+                    title: subgroupEl.querySelector(`input[name="flight_group_title[${groupIndex}][${subGroupIdx}]"]`).value,
+                    rows: []
+                };
+                subgroupEl.querySelectorAll('.flight-table-body-subgroup tr').forEach(rowEl => {
+                    const inputs = rowEl.querySelectorAll('input.flight-schedule-input');
+                    flightSubgroup.rows.push({
+                        flightNum: inputs[0]?.value || '', depDate: inputs[1]?.value || '',
+                        originCity: inputs[2]?.value || '', depTime: inputs[3]?.value || '',
+                        arrDate: inputs[4]?.value || '', destCity: inputs[5]?.value || '',
+                        arrTime: inputs[6]?.value || ''
+                    });
+                });
+                sourceGroupData.flightSubgroups.push(flightSubgroup);
+            });
+
+            // 간단 일정 데이터 수집
+            quoteGroupElement.querySelectorAll(`#itineraryTableBody_${groupIndex} tr`).forEach(rowEl => {
+                const inputs = rowEl.querySelectorAll('input.itinerary-schedule-input');
+                sourceGroupData.itinerarySummaryRows.push({
+                    dayNo: inputs[0]?.value || '', dayDate: inputs[1]?.value || '',
+                    sCity: inputs[2]?.value || '', eCity: inputs[3]?.value || '',
+                    hotel: inputs[4]?.value || '', traffic: inputs[5]?.value || '',
+                    bigo: inputs[6]?.value || ''
+                });
+            });
+
+            // 상세 일정표 데이터 수집
+            quoteGroupElement.querySelectorAll(`#detailedItineraryGroupsContainer_${groupIndex} .detailed-itinerary-day-group`).forEach(dayGroupEl => {
+                const dayGroupData = {
+                    title: dayGroupEl.querySelector('input[name^="detailed_itinerary_day_group_title"]').value,
+                    rows: []
+                };
+                dayGroupEl.querySelectorAll('.detailed-itinerary-day-group-table-body tr').forEach(rowEl => {
+                    const inputs = rowEl.querySelectorAll('.detailed-itinerary-day-input');
+                    dayGroupData.rows.push({
+                        time: inputs[0]?.innerText || '',
+                        schedule: inputs[1]?.innerText || '',
+                        remark: inputs[2]?.innerText || ''
+                    });
+                });
+                sourceGroupData.detailedItineraryGroups.push(dayGroupData);
+            });
+            data.quoteGroups.push(sourceGroupData);
+        });
+        return data;
+    }
+
+    function restoreEditorFromData(data) {
+        try {
+            // 0. 기존 내용 초기화
+            document.getElementById('quoteGroupsContainer').innerHTML = '';
+            quoteGroupCounter = 0;
+            detailedItineraryDayGroupCounters = {};
+
+            // 1. 전역 설정 복원
+            if (data.globalSettings) {
+                document.getElementById('customerName').value = data.globalSettings.customerName || '';
+                document.getElementById('customerEmail').value = data.globalSettings.customerEmail || '';
+                document.getElementById('custcmail').value = data.globalSettings.custcmail || '';
+                document.getElementById('subject').value = data.globalSettings.subject || '[내일투어]  고객님, 행복한 여행을 위한 견적 안내 메일입니다.';
+                document.getElementById('introText').value = data.globalSettings.introText || '';
+                document.getElementById('goodnm').value = data.globalSettings.goodnm || '';
+                document.getElementById('travelerInfoText').value = data.globalSettings.travelerInfoText || '';
+                document.getElementById('empnm').value = data.globalSettings.empnm || '임창순';
+                document.getElementById('empmail').value = data.globalSettings.empmail || 'fire@naeiltour.co.kr';
+                document.getElementById('emptel').value = data.globalSettings.emptel || '02-6262-5301';
+            }
+
+            // 2. 견적 그룹들 복원
+            if (data.quoteGroups && Array.isArray(data.quoteGroups)) {
+                data.quoteGroups.forEach(groupData => {
+                    createQuoteGroup(quoteGroupCounter++, null, groupData);
+                });
+            }
+            alert("견적 데이터 복원 완료.");
+        } catch (error) {
+            alert("견적 데이터 복원 중 오류가 발생했습니다: " + error.message);
+            console.error("Error restoring editor data:", error);
+        }
+    }
+
 
     // ----- DOMContentLoaded 및 이벤트 리스너 -----
     document.addEventListener('DOMContentLoaded', function() {
         enableSelectOnFocus('form[name="form1"]');
-        createQuoteGroup(quoteGroupCounter++); 
+        createQuoteGroup(quoteGroupCounter++);
         setTimeout(() => { if (document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur(); }, 200);
         const globalAddBtn = document.getElementById('addGlobalQuoteGroupBtn');
         if (globalAddBtn) {
@@ -937,17 +1088,17 @@
                 if (newGroupElement) {
                     newGroupElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     const titleInputToFocus = newGroupElement.querySelector('input[name^="quote_group_title"]');
-                    if (titleInputToFocus) setTimeout(() => titleInputToFocus.focus(), 300); 
+                    if (titleInputToFocus) setTimeout(() => titleInputToFocus.focus(), 300);
                 }
             });
         }
         document.getElementById('quoteGroupsContainer').addEventListener('click', function(e) {
             const target = e.target; const quoteGroupElement = target.closest('.quote-group-section'); if (!quoteGroupElement) return;
-            const quoteGroupIndex = quoteGroupElement.dataset.groupIndex; const priceSubgroupElement = target.closest('.price-subgroup'); 
+            const quoteGroupIndex = quoteGroupElement.dataset.groupIndex; const priceSubgroupElement = target.closest('.price-subgroup');
             if (target.closest('.delete-quote-group-btn')) { if (confirm('이 견적 그룹 전체를 삭제하시겠습니까?')) { delete detailedItineraryDayGroupCounters[quoteGroupIndex]; quoteGroupElement.remove(); } }
             else if (target.closest('.copy-quote-group-btn')) { duplicateQuoteGroup(quoteGroupElement); }
             else if (target.closest('.delete-dynamic-section-btn')) { const dynamicSection = target.closest('.dynamic-section'); if (dynamicSection) { dynamicSection.remove(); if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement); } }
-            else if (target.closest('.delete-row')) { const row = target.closest('tr'); if (row) { row.remove(); if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement); } } 
+            else if (target.closest('.delete-row')) { const row = target.closest('tr'); if (row) { row.remove(); if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement); } }
             else if (target.closest('.add-detailed-itinerary-day-group-button')) {
                 const container = quoteGroupElement.querySelector(`#detailedItineraryGroupsContainer_${quoteGroupIndex}`);
                 if (container) { createDetailedItineraryDayGroupForQuoteGroup(quoteGroupIndex, container); updateDetailedItineraryGroupNumbering(quoteGroupIndex); }
@@ -958,7 +1109,7 @@
                 const dayGroup = target.closest('.detailed-itinerary-day-group');
                 if (dayGroup) {
                     const tbody = dayGroup.querySelector('.detailed-itinerary-day-group-table-body');
-                    const dayGroupUniqueIndex = dayGroup.dataset.dayGroupIndex; 
+                    const dayGroupUniqueIndex = dayGroup.dataset.dayGroupIndex;
                     if (tbody) {
                         const newRow = addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, quoteGroupIndex, dayGroupUniqueIndex);
                         if (newRow) { const firstEditableDiv = newRow.querySelector('.detailed-itinerary-day-input'); if(firstEditableDiv?.focus) firstEditableDiv.focus(); }
@@ -972,7 +1123,7 @@
                 const dayGroupElement = targetInput.closest('.detailed-itinerary-day-group');
                 if (dayGroupElement) {
                     const quoteGroupIndex = dayGroupElement.dataset.quoteGroupIndex;
-                    const dayGroupUniqueIndex = dayGroupElement.dataset.dayGroupIndex; 
+                    const dayGroupUniqueIndex = dayGroupElement.dataset.dayGroupIndex;
                     handlePasteToDetailedItineraryDayGroupTable(e, quoteGroupIndex, dayGroupUniqueIndex);
                 }
             }
@@ -983,18 +1134,108 @@
                 if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); document.execCommand('bold', false, null); }
             }
         });
+
+        // 파일 불러오기 이벤트 리스너
+        const loadQuoteFileInput = document.getElementById('loadQuoteFile');
+        if (loadQuoteFileInput) {
+            loadQuoteFileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const htmlString = e.target.result;
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(htmlString, "text/html");
+                            const embeddedDataElement = doc.getElementById('embeddedQuoteData');
+
+                            if (embeddedDataElement && embeddedDataElement.textContent) {
+                                const loadedData = JSON.parse(embeddedDataElement.textContent);
+                                restoreEditorFromData(loadedData);
+                            } else {
+                                alert('선택한 HTML 파일에서 견적 데이터를 찾을 수 없습니다. 저장 시 "HTML 파일로 저장" 버튼을 사용했는지 확인해주세요.');
+                            }
+                        } catch (err) {
+                            alert('파일을 불러오는 중 오류가 발생했습니다: ' + err.message);
+                            console.error("Error loading file:", err);
+                        }
+                    };
+                    reader.onerror = function() {
+                        alert("파일을 읽는 중 오류가 발생했습니다.");
+                    };
+                    reader.readAsText(file, 'UTF-8'); // UTF-8 명시
+                    event.target.value = null; // 동일 파일 다시 선택 가능하게
+                }
+            });
+        }
     });
-    function duplicateQuoteGroup(sourceGroupElement) { 
+
+    function duplicateQuoteGroup(sourceGroupElement) {
         const sourceGroupIndex = sourceGroupElement.dataset.groupIndex; const newGroupIndex = quoteGroupCounter++;
-        detailedItineraryDayGroupCounters[newGroupIndex] = 0; 
+        detailedItineraryDayGroupCounters[newGroupIndex] = 0;
+
+        // getAllEditorDataAsObject와 유사하게 데이터를 수집하되, 단일 그룹에 대해서만 수행
         const sourceData = {
-            groupTitle: sourceGroupElement.querySelector(`input[name="quote_group_title[${sourceGroupIndex}]"]`).value, priceSubgroups: [],
-            inclusionExclusion: { includedTextarea: sourceGroupElement.querySelector(`textarea[name="included_items_textarea[${sourceGroupIndex}]"]`)?.value || '', excludedTextarea: sourceGroupElement.querySelector(`textarea[name="excluded_items_textarea[${sourceGroupIndex}]"]`)?.value || '' },
-            flightSubgroups: [], itinerarySummaryRows: [], detailedItineraryGroups: [] 
+            groupTitle: sourceGroupElement.querySelector(`input[name="quote_group_title[${sourceGroupIndex}]"]`).value,
+            priceSubgroups: [],
+            inclusionExclusion: {
+                includedTextarea: sourceGroupElement.querySelector(`textarea[name="included_items_textarea[${sourceGroupIndex}]"]`)?.value || '',
+                excludedTextarea: sourceGroupElement.querySelector(`textarea[name="excluded_items_textarea[${sourceGroupIndex}]"]`)?.value || ''
+            },
+            flightSubgroups: [],
+            itinerarySummaryRows: [],
+            detailedItineraryGroups: []
         };
-        sourceGroupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => { /* ... */ }); // 내용 동일
-        sourceGroupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => { /* ... */ }); // 내용 동일
-        sourceGroupElement.querySelectorAll(`#itineraryTableBody_${sourceGroupIndex} tr`).forEach(rowEl => { /* ... */ }); // 내용 동일
+
+        // 요금 소그룹
+        sourceGroupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => {
+            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+            const priceSubgroup = {
+                title: subgroupEl.querySelector(`input[name="price_subgroup_title[${sourceGroupIndex}][${subGroupIdx}]"]`).value,
+                rows: []
+            };
+            subgroupEl.querySelectorAll('.price-table-body tr').forEach(rowEl => {
+                priceSubgroup.rows.push({
+                    title: rowEl.querySelector(`input[name="p_title[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
+                    perPrice: rowEl.querySelector(`input[name="p_perprice[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
+                    number: rowEl.querySelector(`input[name="p_number[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
+                    bigo: rowEl.querySelector(`input[name="p_bigo[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
+                });
+            });
+            sourceData.priceSubgroups.push(priceSubgroup);
+        });
+
+        // 항공 스케줄
+        sourceGroupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => {
+            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+            const flightSubgroup = {
+                title: subgroupEl.querySelector(`input[name="flight_group_title[${sourceGroupIndex}][${subGroupIdx}]"]`).value,
+                rows: []
+            };
+            subgroupEl.querySelectorAll('.flight-table-body-subgroup tr').forEach(rowEl => {
+                const inputs = rowEl.querySelectorAll('input.flight-schedule-input');
+                flightSubgroup.rows.push({
+                    flightNum: inputs[0]?.value || '', depDate: inputs[1]?.value || '',
+                    originCity: inputs[2]?.value || '', depTime: inputs[3]?.value || '',
+                    arrDate: inputs[4]?.value || '', destCity: inputs[5]?.value || '',
+                    arrTime: inputs[6]?.value || ''
+                });
+            });
+            sourceData.flightSubgroups.push(flightSubgroup);
+        });
+
+        // 간단 일정
+        sourceGroupElement.querySelectorAll(`#itineraryTableBody_${sourceGroupIndex} tr`).forEach(rowEl => {
+            const inputs = rowEl.querySelectorAll('input.itinerary-schedule-input');
+            sourceData.itinerarySummaryRows.push({
+                dayNo: inputs[0]?.value || '', dayDate: inputs[1]?.value || '',
+                sCity: inputs[2]?.value || '', eCity: inputs[3]?.value || '',
+                hotel: inputs[4]?.value || '', traffic: inputs[5]?.value || '',
+                bigo: inputs[6]?.value || ''
+            });
+        });
+
+        // 상세 일정표
         sourceGroupElement.querySelectorAll(`#detailedItineraryGroupsContainer_${sourceGroupIndex} .detailed-itinerary-day-group`).forEach(dayGroupEl => {
             const dayGroupData = { title: dayGroupEl.querySelector('input[name^="detailed_itinerary_day_group_title"]').value, rows: [] };
             dayGroupEl.querySelectorAll('.detailed-itinerary-day-group-table-body tr').forEach(rowEl => {
@@ -1003,9 +1244,11 @@
             });
             sourceData.detailedItineraryGroups.push(dayGroupData);
         });
+
         createQuoteGroup(newGroupIndex, sourceGroupElement, sourceData);
     }
-    function previewQuote() { 
+
+    function previewQuote() {
         syncAllContentEditablesToTextareas(); const form = document.form1;
         if (!form.custname.value.trim()) { alert('받는이를 입력해 주세요.'); form.custname.focus(); return; }
         if (!form.custmail.value.trim()) { alert('받는이 메일 주소를 입력해 주세요.'); form.custmail.focus(); return; }
@@ -1027,12 +1270,13 @@
         const toggleScript = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:11px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
         const previewWindow = window.open('', '_blank', 'width=840,height=800,scrollbars=yes,resizable=yes');
         if (previewWindow) {
-            previewWindow.document.write('<html><head><title>견적서 미리보기</title><meta name="viewport" content="width=device-width, initial-scale=1.0">' + fontAwesomeLink + mobileStyles + toggleScript + '</head><body style="margin:0; padding:20px; background-color: #f0f0f0;">' + fullPreviewHTML + '</body></html>');
+            previewWindow.document.write('<html><head><title>견적서 미리보기</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' + fontAwesomeLink + mobileStyles + toggleScript + '</head><body style="margin:0; padding:20px; background-color: #f0f0f0;">' + fullPreviewHTML + '</body></html>');
             previewWindow.document.close(); previewWindow.focus();
         } else alert("팝업 차단 기능이 활성화되어 있으면 미리보기가 새 창에 표시되지 않을 수 있습니다.");
     }
-    function downloadGeneratedHTML() { 
+    function downloadGeneratedHTML() {
         syncAllContentEditablesToTextareas(); const form = document.form1;
+        // 유효성 검사는 previewQuote와 동일하게 수행
         if (!form.custname.value.trim()) { alert('받는이를 입력해 주세요.'); form.custname.focus(); return; }
         if (!form.custmail.value.trim()) { alert('받는이 메일 주소를 입력해 주세요.'); form.custmail.focus(); return; }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -1043,14 +1287,23 @@
         if (!form.empmail.value.trim()) { alert('회신 할 메일주소를 입력해 주세요.'); form.empmail.focus(); return; }
         if (!emailRegex.test(form.empmail.value.trim())) { alert('올바른 형식의 회신 메일 주소를 입력해 주세요.'); form.empmail.focus(); return; }
         if (!form.emptel.value.trim()) { alert('연락처를 입력해 주세요.'); form.emptel.focus(); return; }
+
         let mainContentHTML = _generatePreviewBasicInfoHTML_Template(form) + _generatePreviewTravelerInfoHTML_Template();
         const quoteGroupElements_dl = document.querySelectorAll('#quoteGroupsContainer .quote-group-section');
         const totalQuoteGroups_dl = quoteGroupElements_dl.length;
         quoteGroupElements_dl.forEach((groupEl) => mainContentHTML += _generatePreviewForSingleQuoteGroupHTML_Template(groupEl, groupEl.dataset.groupIndex, totalQuoteGroups_dl));
+
         const fontAwesomeLink_dl = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">';
         const toggleScript_dl = `<script> function togglePreviewGroupContent(contentId, iconId) { const contentElement = document.getElementById(contentId); const iconElement = document.getElementById(iconId); if (contentElement && iconElement) { if (contentElement.style.display === 'none') { contentElement.style.display = 'table-row-group'; iconElement.classList.remove('fa-plus-square'); iconElement.classList.add('fa-minus-square'); } else { contentElement.style.display = 'none'; iconElement.classList.remove('fa-minus-square'); iconElement.classList.add('fa-plus-square'); } } } <\/script> <style> .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; cursor: pointer; } @media screen and (max-width: 760px) { .preview-toggle-icon { font-size: 1em; } } .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { font-size:11px !important; } .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; } </style>`;
-        let fullPreviewHTML_forDownload = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>견적서 - ${form.goodnm.value || '내일투어'}</title>${fontAwesomeLink_dl}${getMobileStylesForDownload()}${toggleScript_dl}</head><body style="margin:0; padding:0; background-color: #ffffff;"><table style="width:710px; margin: 0 auto; border-spacing: 0; border-collapse: collapse;"><tbody>${_getPreviewTemplateHeaderHTML()}<tr><td style="padding: 0px; width:100%; border:1px solid #d2d2d2; background-color: #ffffff;"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody><tr><td style="padding:20px 15px 40px"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody>${mainContentHTML}${_getPreviewTemplateFooterHTML()}</tbody></table></td></tr></tbody></table></td></tr></tbody></table><map name="naeil_header" id="naeil_header_dl"></map><map name="naeil_footer" id="naeil_footer_dl"></map></body></html>`;
-        const fileName = `견적서_${form.custname.value.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.html`;
+
+        const editorData = getAllEditorDataAsObject();
+        const editorDataJSONString = JSON.stringify(editorData);
+        const safeEditorDataJSONString = editorDataJSONString.replace(/<\/script>/g, '<\\/script>'); // 이스케이프
+        const embeddedDataScript = `<script type="application/json" id="embeddedQuoteData">${safeEditorDataJSONString}<\/script>`;
+
+        let fullPreviewHTML_forDownload = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>견적서 - ${form.goodnm.value || '내일투어'}</title>${fontAwesomeLink_dl}${getMobileStylesForDownload()}${toggleScript_dl}</head><body style="margin:0; padding:0; background-color: #ffffff;"><table style="width:710px; margin: 0 auto; border-spacing: 0; border-collapse: collapse;"><tbody>${_getPreviewTemplateHeaderHTML()}<tr><td style="padding: 0px; width:100%; border:1px solid #d2d2d2; background-color: #ffffff;"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody><tr><td style="padding:20px 15px 40px"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody>${mainContentHTML}${_getPreviewTemplateFooterHTML()}</tbody></table></td></tr></tbody></table></td></tr></tbody></table><map name="naeil_header" id="naeil_header_dl"></map><map name="naeil_footer" id="naeil_footer_dl"></map>${embeddedDataScript}</body></html>`;
+
+        const fileName = `견적서_${(form.custname.value || '고객').replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.html`;
         const blob = new Blob([fullPreviewHTML_forDownload], { type: 'text/html;charset=utf-8' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob); link.download = fileName;
