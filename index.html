@@ -347,7 +347,7 @@
             createPriceSubgroup(priceSectionsContainer, groupIndex, priceSubgroupCounter++);
         }
     }
-   function createPriceSubgroup(container, groupIndex, subGroupIndex, sourceSubgroupData = null) {
+   function createPriceSubgroup(container, groupIndex, subGroupIndex, sourceSubgroupData = null) { // Added sourceSubgroupData
     const sectionId = `priceSection_${groupIndex}_${subGroupIndex}`;
     const tableBodyId = `priceTableBody_${groupIndex}_${subGroupIndex}`;
     const grandTotalId = `grandTotal_${groupIndex}_${subGroupIndex}`;
@@ -357,7 +357,7 @@
     sectionDiv.id = sectionId;
     sectionDiv.dataset.groupIndex = groupIndex;
     sectionDiv.dataset.subGroupIndex = subGroupIndex;
-    const initialSubgroupTitle = sourceSubgroupData ? sourceSubgroupData.title : "";
+    const initialSubgroupTitle = sourceSubgroupData ? sourceSubgroupData.title : ""; // Use sourceSubgroupData
     sectionDiv.innerHTML = `
         <button type="button" class="delete-dynamic-section delete-dynamic-section-btn text-red-500 hover:text-red-700" title="이 요금 소그룹 삭제"><i class="fas fa-trash-alt mr-1"></i>삭제</button>
         <div class="mb-2">
@@ -373,22 +373,31 @@
         </div>`;
     container.appendChild(sectionDiv);
     const tbody = sectionDiv.querySelector('.price-table-body');
-    if (sourceSubgroupData && sourceSubgroupData.rows && sourceSubgroupData.rows.length > 0) {
+    if (sourceSubgroupData && sourceSubgroupData.rows && sourceSubgroupData.rows.length > 0) { // Populate from sourceSubgroupData
         sourceSubgroupData.rows.forEach(rowData => addPriceRowToExistingSubgroup(null, sectionDiv, rowData));
     } else {
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "성인요금", perPrice: "", number: 1, bigo: "" });
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "소아요금", perPrice: "", number: 0, bigo: "2~12세미만(좌석점유)\n" });
         addPriceRowToExistingSubgroup(null, sectionDiv, { title: "유아요금", perPrice: "", number: 0, bigo: "24개월미만(좌석미점유)\n" });
     }
-    initPriceTableForSubgroup(sectionDiv);
+    initPriceTableForSubgroup(sectionDiv); // Initialize event listeners
     return sectionDiv;
 }
     function initPriceTableForSubgroup(subgroupElement) {
-        subgroupElement.querySelectorAll('.price-per-person, .person-count').forEach(input => input.addEventListener('input', (e) => updateRowTotalForSubgroup(e, subgroupElement)));
+        // Event delegation for input fields
+        subgroupElement.addEventListener('input', function(e) {
+            if (e.target.matches('.price-per-person, .person-count')) {
+                updateRowTotalForSubgroup(e, subgroupElement);
+            }
+        });
+
+        // Initialize totals for existing rows
         subgroupElement.querySelectorAll('.price-table-body tr').forEach(row => {
             const firstInput = row.querySelector('.price-per-person');
             if (firstInput) updateRowTotalForSubgroup({ target: firstInput }, subgroupElement);
         });
+
+        // Add row button listener (remains as is, specific to this subgroup)
         const addRowButton = subgroupElement.querySelector('.add-price-row-to-subgroup');
         if (addRowButton) addRowButton.addEventListener('click', (e) => addPriceRowToExistingSubgroup(e, subgroupElement));
     }
@@ -1091,6 +1100,88 @@
         } </style>`;
     }
 
+    function _getQuoteGroupDataFromElement(groupElement) {
+        const groupIndex = groupElement.dataset.groupIndex;
+        const data = {
+            groupTitle: groupElement.querySelector(`input[name="quote_group_title[${groupIndex}]"]`).value,
+            borderColor: groupElement.style.borderColor || quoteGroupBorderColors[0],
+            priceSubgroups: [],
+            inclusionExclusion: {
+                includedTextarea: groupElement.querySelector(`textarea[name="included_items_textarea[${groupIndex}]"]`)?.value || '',
+                excludedTextarea: groupElement.querySelector(`textarea[name="excluded_items_textarea[${groupIndex}]"]`)?.value || ''
+            },
+            flightSubgroups: [],
+            itinerarySummaryRows: [],
+            detailedItineraryGroups: []
+        };
+
+        // 요금 소그룹 데이터 추출
+        groupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => {
+            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+            const priceSubgroup = {
+                title: subgroupEl.querySelector(`input[name="price_subgroup_title[${groupIndex}][${subGroupIdx}]"]`).value,
+                rows: []
+            };
+            subgroupEl.querySelectorAll('.price-table-body tr').forEach(rowEl => {
+                priceSubgroup.rows.push({
+                    title: rowEl.querySelector(`input[name="p_title[${groupIndex}][${subGroupIdx}][]"]`).value,
+                    perPrice: rowEl.querySelector(`input[name="p_perprice[${groupIndex}][${subGroupIdx}][]"]`).value,
+                    number: rowEl.querySelector(`input[name="p_number[${groupIndex}][${subGroupIdx}][]"]`).value,
+                    bigo: rowEl.querySelector(`input[name="p_bigo[${groupIndex}][${subGroupIdx}][]"]`).value,
+                });
+            });
+            data.priceSubgroups.push(priceSubgroup);
+        });
+
+        // 항공 스케줄 소그룹 데이터 추출
+        groupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => {
+            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
+            const flightSubgroup = {
+                title: subgroupEl.querySelector(`input[name="flight_group_title[${groupIndex}][${subGroupIdx}]"]`).value,
+                rows: []
+            };
+            subgroupEl.querySelectorAll('.flight-table-body-subgroup tr').forEach(rowEl => {
+                const inputs = rowEl.querySelectorAll('input.flight-schedule-input');
+                flightSubgroup.rows.push({
+                    flightNum: inputs[0]?.value || '', depDate: inputs[1]?.value || '',
+                    originCity: inputs[2]?.value || '', depTime: inputs[3]?.value || '',
+                    arrDate: inputs[4]?.value || '', destCity: inputs[5]?.value || '',
+                    arrTime: inputs[6]?.value || ''
+                });
+            });
+            data.flightSubgroups.push(flightSubgroup);
+        });
+
+        // 간단 일정 데이터 추출
+        groupElement.querySelectorAll(`#itineraryTableBody_${groupIndex} tr`).forEach(rowEl => {
+            const inputs = rowEl.querySelectorAll('input.itinerary-schedule-input');
+            data.itinerarySummaryRows.push({
+                dayNo: inputs[0]?.value || '', dayDate: inputs[1]?.value || '',
+                sCity: inputs[2]?.value || '', eCity: inputs[3]?.value || '',
+                hotel: inputs[4]?.value || '', traffic: inputs[5]?.value || '',
+                bigo: inputs[6]?.value || ''
+            });
+        });
+
+        // 상세 일정 데이터 추출
+        groupElement.querySelectorAll(`#detailedItineraryGroupsContainer_${groupIndex} .detailed-itinerary-day-group`).forEach(dayGroupEl => {
+            const dayGroupData = {
+                title: dayGroupEl.querySelector('input[name^="detailed_itinerary_day_group_title"]').value,
+                rows: []
+            };
+            dayGroupEl.querySelectorAll('.detailed-itinerary-day-group-table-body tr').forEach(rowEl => {
+                const inputs = rowEl.querySelectorAll('.detailed-itinerary-day-input');
+                dayGroupData.rows.push({
+                    time: inputs[0]?.innerText || '',
+                    schedule: inputs[1]?.innerText || '',
+                    remark: inputs[2]?.innerText || ''
+                });
+            });
+            data.detailedItineraryGroups.push(dayGroupData);
+        });
+        return data;
+    }
+
     function getAllEditorDataAsObject() {
         const data = {
             globalSettings: {
@@ -1109,81 +1200,7 @@
         };
 
         document.querySelectorAll('#quoteGroupsContainer .quote-group-section').forEach(quoteGroupElement => {
-            const groupIndex = quoteGroupElement.dataset.groupIndex;
-            const sourceGroupData = {
-                groupTitle: quoteGroupElement.querySelector(`input[name="quote_group_title[${groupIndex}]"]`).value,
-                borderColor: quoteGroupElement.style.borderColor || quoteGroupBorderColors[0],
-                priceSubgroups: [],
-                inclusionExclusion: {
-                    includedTextarea: quoteGroupElement.querySelector(`textarea[name="included_items_textarea[${groupIndex}]"]`)?.value || '',
-                    excludedTextarea: quoteGroupElement.querySelector(`textarea[name="excluded_items_textarea[${groupIndex}]"]`)?.value || ''
-                },
-                flightSubgroups: [],
-                itinerarySummaryRows: [],
-                detailedItineraryGroups: []
-            };
-
-            quoteGroupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => {
-                const subGroupIdx = subgroupEl.dataset.subGroupIndex;
-                const priceSubgroup = {
-                    title: subgroupEl.querySelector(`input[name="price_subgroup_title[${groupIndex}][${subGroupIdx}]"]`).value,
-                    rows: []
-                };
-                subgroupEl.querySelectorAll('.price-table-body tr').forEach(rowEl => {
-                    priceSubgroup.rows.push({
-                        title: rowEl.querySelector(`input[name="p_title[${groupIndex}][${subGroupIdx}][]"]`).value,
-                        perPrice: rowEl.querySelector(`input[name="p_perprice[${groupIndex}][${subGroupIdx}][]"]`).value,
-                        number: rowEl.querySelector(`input[name="p_number[${groupIndex}][${subGroupIdx}][]"]`).value,
-                        bigo: rowEl.querySelector(`input[name="p_bigo[${groupIndex}][${subGroupIdx}][]"]`).value,
-                    });
-                });
-                sourceGroupData.priceSubgroups.push(priceSubgroup);
-            });
-
-            quoteGroupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => {
-                const subGroupIdx = subgroupEl.dataset.subGroupIndex;
-                const flightSubgroup = {
-                    title: subgroupEl.querySelector(`input[name="flight_group_title[${groupIndex}][${subGroupIdx}]"]`).value,
-                    rows: []
-                };
-                subgroupEl.querySelectorAll('.flight-table-body-subgroup tr').forEach(rowEl => {
-                    const inputs = rowEl.querySelectorAll('input.flight-schedule-input');
-                    flightSubgroup.rows.push({
-                        flightNum: inputs[0]?.value || '', depDate: inputs[1]?.value || '',
-                        originCity: inputs[2]?.value || '', depTime: inputs[3]?.value || '',
-                        arrDate: inputs[4]?.value || '', destCity: inputs[5]?.value || '',
-                        arrTime: inputs[6]?.value || ''
-                    });
-                });
-                sourceGroupData.flightSubgroups.push(flightSubgroup);
-            });
-
-            quoteGroupElement.querySelectorAll(`#itineraryTableBody_${groupIndex} tr`).forEach(rowEl => {
-                const inputs = rowEl.querySelectorAll('input.itinerary-schedule-input');
-                sourceGroupData.itinerarySummaryRows.push({
-                    dayNo: inputs[0]?.value || '', dayDate: inputs[1]?.value || '',
-                    sCity: inputs[2]?.value || '', eCity: inputs[3]?.value || '',
-                    hotel: inputs[4]?.value || '', traffic: inputs[5]?.value || '',
-                    bigo: inputs[6]?.value || ''
-                });
-            });
-
-            quoteGroupElement.querySelectorAll(`#detailedItineraryGroupsContainer_${groupIndex} .detailed-itinerary-day-group`).forEach(dayGroupEl => {
-                const dayGroupData = {
-                    title: dayGroupEl.querySelector('input[name^="detailed_itinerary_day_group_title"]').value,
-                    rows: []
-                };
-                dayGroupEl.querySelectorAll('.detailed-itinerary-day-group-table-body tr').forEach(rowEl => {
-                    const inputs = rowEl.querySelectorAll('.detailed-itinerary-day-input');
-                    dayGroupData.rows.push({
-                        time: inputs[0]?.innerText || '',
-                        schedule: inputs[1]?.innerText || '',
-                        remark: inputs[2]?.innerText || ''
-                    });
-                });
-                sourceGroupData.detailedItineraryGroups.push(dayGroupData);
-            });
-            data.quoteGroups.push(sourceGroupData);
+            data.quoteGroups.push(_getQuoteGroupDataFromElement(quoteGroupElement));
         });
         return data;
     }
@@ -1349,74 +1366,13 @@
     });
 
     function duplicateQuoteGroup(sourceGroupElement) {
-        const sourceGroupIndex = sourceGroupElement.dataset.groupIndex;
         const newGroupIndex = quoteGroupCounter++;
+        detailedItineraryDayGroupCounters[newGroupIndex] = 0; // 새 그룹 카운터 초기화
 
-        const sourceData = {
-            groupTitle: sourceGroupElement.querySelector(`input[name="quote_group_title[${sourceGroupIndex}]"]`).value,
-            priceSubgroups: [],
-            inclusionExclusion: {
-                includedTextarea: sourceGroupElement.querySelector(`textarea[name="included_items_textarea[${sourceGroupIndex}]"]`)?.value || '',
-                excludedTextarea: sourceGroupElement.querySelector(`textarea[name="excluded_items_textarea[${sourceGroupIndex}]"]`)?.value || ''
-            },
-            flightSubgroups: [],
-            itinerarySummaryRows: [],
-            detailedItineraryGroups: []
-        };
+        const sourceData = _getQuoteGroupDataFromElement(sourceGroupElement);
+        // sourceData.borderColor is already handled by _getQuoteGroupDataFromElement
+        // and will be used by createQuoteGroup
 
-        sourceGroupElement.querySelectorAll('.price-subgroup').forEach(subgroupEl => {
-            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
-            const priceSubgroup = {
-                title: subgroupEl.querySelector(`input[name="price_subgroup_title[${sourceGroupIndex}][${subGroupIdx}]"]`).value,
-                rows: []
-            };
-            subgroupEl.querySelectorAll('.price-table-body tr').forEach(rowEl => {
-                priceSubgroup.rows.push({
-                    title: rowEl.querySelector(`input[name="p_title[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
-                    perPrice: rowEl.querySelector(`input[name="p_perprice[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
-                    number: rowEl.querySelector(`input[name="p_number[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
-                    bigo: rowEl.querySelector(`input[name="p_bigo[${sourceGroupIndex}][${subGroupIdx}][]"]`).value,
-                });
-            });
-            sourceData.priceSubgroups.push(priceSubgroup);
-        });
-
-        sourceGroupElement.querySelectorAll('.flight-schedule-subgroup').forEach(subgroupEl => {
-            const subGroupIdx = subgroupEl.dataset.subGroupIndex;
-            const flightSubgroup = {
-                title: subgroupEl.querySelector(`input[name="flight_group_title[${sourceGroupIndex}][${subGroupIdx}]"]`).value,
-                rows: []
-            };
-            subgroupEl.querySelectorAll('.flight-table-body-subgroup tr').forEach(rowEl => {
-                const inputs = rowEl.querySelectorAll('input.flight-schedule-input');
-                flightSubgroup.rows.push({
-                    flightNum: inputs[0]?.value || '', depDate: inputs[1]?.value || '',
-                    originCity: inputs[2]?.value || '', depTime: inputs[3]?.value || '',
-                    arrDate: inputs[4]?.value || '', destCity: inputs[5]?.value || '',
-                    arrTime: inputs[6]?.value || ''
-                });
-            });
-            sourceData.flightSubgroups.push(flightSubgroup);
-        });
-
-        sourceGroupElement.querySelectorAll(`#itineraryTableBody_${sourceGroupIndex} tr`).forEach(rowEl => {
-            const inputs = rowEl.querySelectorAll('input.itinerary-schedule-input');
-            sourceData.itinerarySummaryRows.push({
-                dayNo: inputs[0]?.value || '', dayDate: inputs[1]?.value || '',
-                sCity: inputs[2]?.value || '', eCity: inputs[3]?.value || '',
-                hotel: inputs[4]?.value || '', traffic: inputs[5]?.value || '',
-                bigo: inputs[6]?.value || ''
-            });
-        });
-
-        sourceGroupElement.querySelectorAll(`#detailedItineraryGroupsContainer_${sourceGroupIndex} .detailed-itinerary-day-group`).forEach(dayGroupEl => {
-            const dayGroupData = { title: dayGroupEl.querySelector('input[name^="detailed_itinerary_day_group_title"]').value, rows: [] };
-            dayGroupEl.querySelectorAll('.detailed-itinerary-day-group-table-body tr').forEach(rowEl => {
-                const inputs = rowEl.querySelectorAll('.detailed-itinerary-day-input');
-                dayGroupData.rows.push({ time: inputs[0]?.innerText || '', schedule: inputs[1]?.innerText || '', remark: inputs[2]?.innerText || '' });
-            });
-            sourceData.detailedItineraryGroups.push(dayGroupData);
-        });
         createQuoteGroup(newGroupIndex, sourceGroupElement, sourceData);
     }
 
