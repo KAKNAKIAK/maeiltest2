@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>견적서_한원희버전_상세일정통합_붙여넣기수정</title>
+<title>견적서_한원희버전</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 <style>
@@ -20,10 +20,8 @@
 .w-3\/10 { width: 34%; }
 .w-4\/10 { width: 40%; }
     .quote-group-section {
-        /* border: 2px solid #4A90E2; */ /* 이 줄을 주석 처리하거나 삭제 */
-        border-width: 2px; /* 두께는 유지 */
-        border-style: solid; /* 선 종류는 유지 */
-        /* borderColor는 JS에서 설정 */
+        border-width: 2px;
+        border-style: solid;
         padding: 1.5rem;
         margin-bottom: 2rem;
         border-radius: 8px;
@@ -53,7 +51,7 @@
     .delete-quote-group-btn:hover { background-color: #c82333; }
 
     .dynamic-section { border: 1px dashed #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; background-color: #fdfdfd; position: relative; }
-    .delete-dynamic-section-btn { /* 요금, 항공 소그룹 삭제 버튼 */
+    .delete-dynamic-section-btn {
         position: absolute;
         top: 0.75rem;
         right: 0.75rem;
@@ -77,14 +75,11 @@
         border-radius: 4px;
         width: 100%;
     }
-    /* 미리보기용 접기/펼치기 아이콘 스타일 */
     .preview-toggle-icon {
         margin-left: 10px;
         font-size: 0.9em;
         color: #555;
     }
-
-    /* --- 상세 일정표 관련 스타일 시작 --- */
     .detailed-itinerary-day-group {
         border: 1px solid #d1d5db;
         padding: 1rem;
@@ -94,7 +89,7 @@
         position: relative;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     }
-    .detailed-itinerary-group-title-input { /* 일차 정보 입력 필드 */
+    .detailed-itinerary-group-title-input {
         width: calc(100% - 2.5rem);
         padding: 0.5rem 0.75rem;
         border-bottom: 1px solid #d1d5db;
@@ -103,8 +98,8 @@
         font-weight: 600;
         margin-bottom: 0.75rem;
     }
-    .detailed-itinerary-group-title-input::placeholder { /* 자동 넘버링 스타일 */
-        color: #4b5563; /* Tailwind gray-600 or as desired */
+    .detailed-itinerary-group-title-input::placeholder {
+        color: #4b5563;
         font-weight: bold;
     }
     .detailed-itinerary-group-title-input:focus {
@@ -146,14 +141,12 @@
         pointer-events: none;
         display: inline-block;
     }
-    /* --- 상세 일정표 관련 스타일 끝 --- */
 </style>
 </head>
 <body class="bg-white p-4 font-sans">
 
 <form name="form1" method="post" onsubmit="return false;">
 <div class="container mx-auto bg-white p-6 shadow-lg rounded-lg" style="max-width: 800px;">
-<!-- 기본 정보, 예약자 정보, 담당자 정보 등 상단 섹션 -->
 <header class="mb-6 border-b pb-4 border-gray-200">
 <h1 class="text-3xl font-bold text-center custom-orange">내일투어 여행견적서</h1>
 </header>
@@ -203,21 +196,13 @@
 <script>
     // ----- 전역 변수 및 초기화 함수 -----
     let quoteGroupCounter = 0;
-    let detailedItineraryDayGroupCounters = {}; // 각 견적 그룹별 상세 일정 그룹 카운터
+    let detailedItineraryDayGroupCounters = {};
 
-    // 사용할 외곽선 색상 배열 정의
     const quoteGroupBorderColors = [
-        '#4A90E2', // 기존 파란색
-        '#50E3C2', // 청록색
-        '#F5A623', // 주황색
-        '#BD10E0', // 보라색
-        '#7ED321', // 연두색
-        '#D0021B', // 빨간색
-        '#417505', // 진녹색
-        '#9013FE'  // 진보라색
+        '#4A90E2', '#50E3C2', '#F5A623', '#BD10E0',
+        '#7ED321', '#D0021B', '#417505', '#9013FE'
     ];
-    let currentBorderColorIndex = 0; // 현재 사용할 색상 인덱스
-
+    let currentBorderColorIndex = 0;
 
     function enableSelectOnFocus(containerSelector = 'body') {
         const container = document.querySelector(containerSelector);
@@ -231,7 +216,7 @@
             }
         });
     }
-    // ----- 견적 그룹 생성 및 관리 -----
+
     function createQuoteGroup(groupIndex, afterElement = null, sourceGroupData = null) {
         const groupId = `quoteGroup_${groupIndex}`;
         const quoteGroupDiv = document.createElement('div');
@@ -239,18 +224,18 @@
         quoteGroupDiv.id = groupId;
         quoteGroupDiv.dataset.groupIndex = groupIndex;
 
-        // 견적 그룹에 순환되는 테두리 색상 적용
         let borderColorToApply;
         if (sourceGroupData && sourceGroupData.borderColor) {
             borderColorToApply = sourceGroupData.borderColor;
-            // 만약 불러온 색상을 기준으로 currentBorderColorIndex를 업데이트하고 싶다면 추가 로직 필요
-            // 예: currentBorderColorIndex = quoteGroupBorderColors.indexOf(borderColorToApply) !== -1 ? (quoteGroupBorderColors.indexOf(borderColorToApply) + 1) % quoteGroupBorderColors.length : currentBorderColorIndex;
+            const loadedColorIndex = quoteGroupBorderColors.indexOf(borderColorToApply);
+            if (loadedColorIndex !== -1) {
+                currentBorderColorIndex = (loadedColorIndex + 1) % quoteGroupBorderColors.length;
+            }
         } else {
             borderColorToApply = quoteGroupBorderColors[currentBorderColorIndex];
             currentBorderColorIndex = (currentBorderColorIndex + 1) % quoteGroupBorderColors.length;
         }
         quoteGroupDiv.style.borderColor = borderColorToApply;
-
 
         detailedItineraryDayGroupCounters[groupIndex] = 0;
 
@@ -341,19 +326,12 @@
         if (sourceGroupData) {
             const titleInput = quoteGroupDiv.querySelector(`input[name="quote_group_title[${groupIndex}]"]`);
             if (titleInput && sourceGroupData.groupTitle) titleInput.value = sourceGroupData.groupTitle;
-            updateDetailedItineraryGroupNumbering(groupIndex);
-        } else {
-            const detailedContainer = quoteGroupDiv.querySelector(`#detailedItineraryGroupsContainer_${groupIndex}`);
-            if(detailedContainer) {
-                createDetailedItineraryDayGroupForQuoteGroup(groupIndex, detailedContainer);
-                updateDetailedItineraryGroupNumbering(groupIndex);
-            }
-            addItineraryRowForGroup(quoteGroupDiv.querySelector(`#itineraryTableBody_${groupIndex}`), groupIndex);
         }
+        updateDetailedItineraryGroupNumbering(groupIndex);
+
         return quoteGroupDiv;
     }
 
-    // ----- 요금, 항공, 포함/불포함, 간단일정 섹션 초기화 및 관리 함수들 -----
     function initPriceSectionForGroup(quoteGroupElement, groupIndex, sourcePriceSubgroups = null) {
         const addPriceSubgroupButton = quoteGroupElement.querySelector('.add-price-subgroup-button');
         const priceSectionsContainer = quoteGroupElement.querySelector(`#priceSectionsContainer_${groupIndex}`);
@@ -576,24 +554,38 @@
         });
     }
 
-    // ----- 상세 일정표 관련 함수들 -----
+    // ----- 상세 일정표 관련 함수들 (수정된 로직 적용) -----
     function initItineraryDetailForQuoteGroup(quoteGroupElement, groupIndex, sourceData = null) {
         const detailedItineraryContainer = quoteGroupElement.querySelector(`#detailedItineraryGroupsContainer_${groupIndex}`);
         if (!detailedItineraryContainer) return;
         detailedItineraryContainer.innerHTML = '';
+
+        detailedItineraryDayGroupCounters[groupIndex] = 0; // 카운터 초기화
+
         if (sourceData && sourceData.detailedItineraryGroups && sourceData.detailedItineraryGroups.length > 0) {
-            detailedItineraryDayGroupCounters[groupIndex] = 0;
             sourceData.detailedItineraryGroups.forEach(dayGroupData => {
                 const dayGroupEl = createDetailedItineraryDayGroupForQuoteGroup(groupIndex, detailedItineraryContainer, dayGroupData.title);
-                if (dayGroupEl && dayGroupData.rows && dayGroupData.rows.length > 0) {
+                if (dayGroupEl) {
                     const tbody = dayGroupEl.querySelector('.detailed-itinerary-day-group-table-body');
-                    tbody.innerHTML = '';
-                    dayGroupData.rows.forEach(rowData => addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, groupIndex, dayGroupEl.dataset.dayGroupIndex, rowData.time, rowData.schedule, rowData.remark));
+                    if (dayGroupData.rows && dayGroupData.rows.length > 0) {
+                        dayGroupData.rows.forEach(rowData => addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, groupIndex, dayGroupEl.dataset.dayGroupIndex, rowData.time, rowData.schedule, rowData.remark));
+                    } else {
+                        // 복사된 일차 그룹에 행 데이터가 없으면 빈 행을 하나 추가
+                        addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, groupIndex, dayGroupEl.dataset.dayGroupIndex);
+                    }
                 }
             });
+        } else if (!sourceData) {
+            // 견적 그룹이 처음 생성될 때 (sourceData 없음)
+            const firstDayGroup = createDetailedItineraryDayGroupForQuoteGroup(groupIndex, detailedItineraryContainer);
+            if (firstDayGroup) {
+                const tbody = firstDayGroup.querySelector('.detailed-itinerary-day-group-table-body');
+                addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, groupIndex, firstDayGroup.dataset.dayGroupIndex); // 기본 빈 행 추가
+            }
         }
-        // 넘버링은 createQuoteGroup 에서 처리 (sourceData 있을 때, 없을 때 모두)
+        // updateDetailedItineraryGroupNumbering(groupIndex); // createQuoteGroup에서 호출되므로 여기서 중복 호출 불필요
     }
+
     function createDetailedItineraryDayGroupForQuoteGroup(quoteGroupIndex, containerElement, title = "") {
         const dayGroupUniqueIndex = detailedItineraryDayGroupCounters[quoteGroupIndex]++;
         const dayGroupId = `detailedItineraryDayGroup_${quoteGroupIndex}_${dayGroupUniqueIndex}`;
@@ -627,12 +619,10 @@
             </div>
         `;
         containerElement.appendChild(groupDiv);
-        // 새 그룹 생성 시 기본 행 추가 (sourceData에서 복원할 때는 initItineraryDetailForQuoteGroup에서 처리)
-        if (!title && !(groupDiv.querySelector(`#${tableBodyId}`).hasChildNodes())) {
-             addDetailedItineraryRowToDayGroupForQuoteGroup(groupDiv.querySelector(`#${tableBodyId}`), quoteGroupIndex, dayGroupUniqueIndex);
-        }
+        // 이 함수 내에서는 자동으로 빈 행을 추가하지 않습니다.
         return groupDiv;
     }
+
     function updateDetailedItineraryGroupNumbering(quoteGroupIndex) {
         const container = document.getElementById(`detailedItineraryGroupsContainer_${quoteGroupIndex}`);
         if (!container) return;
@@ -652,40 +642,102 @@
             <td class="border-b border-gray-200 p-1 text-center"><button type="button" class="delete-detailed-itinerary-row text-red-500 hover:text-red-700 text-sm p-1" title="이 행 삭제"><i class="fas fa-trash"></i></button></td>`;
         tbodyElement.appendChild(tr); return tr;
     }
-    function handlePasteToDetailedItineraryDayGroupTable(event, quoteGroupIndex, dayGroupIndex) {
-        const targetEditableDiv = event.target; if (!targetEditableDiv.isContentEditable || !targetEditableDiv.classList.contains('detailed-itinerary-day-input')) return;
-        event.preventDefault();
-        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain'); if (!pasteData) return;
-        const linesFromPaste = pasteData.split(/\r\n|\n|\r/);
+                function handlePasteToDetailedItineraryDayGroupTable(event, quoteGroupIndex, dayGroupIndex) {
+        const targetEditableDiv = event.target;
+
+        // 1. 이벤트 대상이 유효한 contentEditable div인지 더 확실하게 확인
+        if (!targetEditableDiv ||
+            typeof targetEditableDiv.isContentEditable === 'undefined' || // isContentEditable 속성 존재 여부 확인
+            !targetEditableDiv.isContentEditable ||
+            !targetEditableDiv.classList || // classList 존재 여부 확인
+            !targetEditableDiv.classList.contains('detailed-itinerary-day-input')) {
+            // console.log("Paste event on non-target element or invalid target:", targetEditableDiv);
+            return; // 대상이 아니면 아무것도 하지 않음
+        }
+
+        event.preventDefault(); // 대상이 확실할 때만 preventDefault 호출
+
+        const pasteData = (event.clipboardData || window.clipboardData).getData('text/plain');
+        if (pasteData === null || typeof pasteData === 'undefined') {
+            // console.log("No paste data found.");
+            return;
+        }
+
+        let linesFromPaste = pasteData.split(/\r\n|\n|\r/);
+
+        if (linesFromPaste.length > 0 && linesFromPaste[linesFromPaste.length - 1].trim() === "") {
+            linesFromPaste.pop();
+        }
+
         let currentTrElement = targetEditableDiv.closest('tr');
-        const currentTbodyElement = currentTrElement.closest('tbody');
-        const cellsInCurrentRow = Array.from(currentTrElement.querySelectorAll('.detailed-itinerary-day-input'));
-        let currentCellIndex = cellsInCurrentRow.indexOf(targetEditableDiv); if (currentCellIndex === -1) currentCellIndex = 0;
+        if (!currentTrElement) {
+            console.error("Paste target's TR element not found.");
+            return;
+        }
+
+        const currentTbodyElement = currentTrElement.closest('tbody.detailed-itinerary-day-group-table-body'); // tbody 클래스명 명시
+        if (!currentTbodyElement) {
+            console.error("Paste target's TBODY element with class 'detailed-itinerary-day-group-table-body' not found.");
+            return;
+        }
+
+        let currentCellIndex = 0;
+        const cellsInCurrentRowNodeList = currentTrElement.querySelectorAll('div.detailed-itinerary-day-input'); // div 태그와 클래스명 명시
+        if (cellsInCurrentRowNodeList && cellsInCurrentRowNodeList.length > 0) {
+            const cellsInCurrentRowArray = Array.from(cellsInCurrentRowNodeList);
+            currentCellIndex = cellsInCurrentRowArray.indexOf(targetEditableDiv);
+            if (currentCellIndex === -1) {
+                // console.warn("Target div not found in current row's input divs, defaulting to index 0.");
+                currentCellIndex = 0;
+            }
+        } else {
+            // console.warn("No input divs found in the current row.");
+        }
+
+
+        if (linesFromPaste.length === 0) {
+            if (pasteData.trim() === "") {
+                targetEditableDiv.innerText = '';
+            }
+            // console.log("No lines to paste after processing.");
+            return;
+        }
+
         linesFromPaste.forEach((line, lineIndex) => {
-            if (!line.trim() && linesFromPaste.length === 1 && lineIndex === 0) { // 단일 빈 줄 붙여넣기 시 아무것도 안함
-                 targetEditableDiv.innerText = line.trim(); // 현재 셀 비우기
-                 return;
-            }
             const cellsFromLine = line.split('\t');
-            if (lineIndex > 0 || !currentTrElement) { // 첫 줄이 아니거나, 현재 행이 없으면 새 행 추가
+
+            // 첫 번째 줄이 아니거나, 또는 첫 번째 줄이지만 붙여넣기 시작한 셀이 첫 번째 셀이 아닌 경우,
+            // 그리고 현재 행이 더 이상 채울 공간이 없는 경우 등 복잡한 시나리오를 단순화하기 위해
+            // 첫 번째 줄은 현재 행에, 이후 줄은 새 행에 넣는 로직 유지.
+            if (lineIndex > 0) {
                 currentTrElement = addDetailedItineraryRowToDayGroupForQuoteGroup(currentTbodyElement, quoteGroupIndex, dayGroupIndex);
-                if (!currentTrElement) return; currentCellIndex = 0;
+                if (!currentTrElement) {
+                    console.warn("Failed to add new row for line:", line);
+                    return; // continue to next line in forEach
+                }
+                currentCellIndex = 0; // Reset for the new row
             }
-            const targetDivsInRow = currentTrElement.querySelectorAll('.detailed-itinerary-day-input');
+            
+            if (!currentTrElement) { // Should not happen if add...Row is successful
+                console.error("currentTrElement became null unexpectedly for line:", line);
+                return; // continue to next line in forEach
+            }
+
+            const targetDivsInRow = currentTrElement.querySelectorAll('div.detailed-itinerary-day-input');
+            if (!targetDivsInRow || targetDivsInRow.length === 0) {
+                // console.warn("No target input divs found in the (potentially new) current row for line:", line);
+                return; // continue to next line in forEach
+            }
+
             let pasteCellIdx = 0;
             for (let i = currentCellIndex; i < targetDivsInRow.length && pasteCellIdx < cellsFromLine.length; i++) {
-                if (targetDivsInRow[i]) targetDivsInRow[i].innerText = cellsFromLine[pasteCellIdx].trim();
+                if (targetDivsInRow[i]) { // targetDivsInRow[i]가 존재하는지 확인
+                    targetDivsInRow[i].innerText = cellsFromLine[pasteCellIdx].trim();
+                }
                 pasteCellIdx++;
             }
-            // 다음 줄 처리를 위해 현재 행을 null로 만들어 새 행을 생성하도록 유도 (또는 다음 행으로 이동)
-            if (lineIndex < linesFromPaste.length -1) { // 마지막 줄이 아니면
-                currentTrElement = currentTrElement.nextElementSibling; // 다음 행으로 이동 시도
-                currentCellIndex = 0; // 다음 행의 첫번째 셀부터 시작
-            }
-
         });
     }
-
     // ----- 미리보기 및 HTML 생성 관련 함수 -----
     function generateHTMLFromDetailedItinerary(quoteGroupIndex) {
         const container = document.getElementById(`detailedItineraryGroupsContainer_${quoteGroupIndex}`);
@@ -866,7 +918,6 @@
         const groupContent = priceHTML + inclusionHTML + exclusionHTML + flightHTML + itineraryHTML;
 
         let collapseButtonHTML = "";
-        // 그룹 내용이 있고, 단일 그룹이 아닐 경우에만 접기 버튼 추가
         if (groupContent.trim() !== "" && !isSingleGroup) {
             const buttonText = "이 그룹 접기";
             collapseButtonHTML = `
@@ -964,7 +1015,7 @@
         return `<tr><td style="padding-top:20px"><table style="width:100%; border-spacing: 0; border-collapse: collapse;"><tbody><tr><td style="padding-bottom:5px"><p style="font-size:14px;color:#ff7c00" class="section-title"><img src="https://www.naeiltour.co.kr/mail/reservation/images/icon_04.png"> <span style="vertical-align: middle;"><strong>항공스케줄</strong></span></p></td></tr><tr><td style="border:1px solid #f37021; padding:10px;" class="section-content-box"><table width="100%" style="border-spacing: 0; border-collapse: collapse;"><tbody>${allSubgroupsContent}</tbody></table></td></tr></tbody></table></td></tr>`;
     }
     function _generatePreviewItineraryHTML_ForQuoteGroup(quoteGroupElement, groupIndex) {
-        const detailedItineraryHtml = generateHTMLFromDetailedItinerary(groupIndex); // 이미 sync됨
+        const detailedItineraryHtml = generateHTMLFromDetailedItinerary(groupIndex);
         let hasContent = false; let itinerarySummaryTableContent = ""; let hasSummaryData = false;
         const itineraryTableRows = quoteGroupElement.querySelectorAll(`#itineraryTableBody_${groupIndex} tr`);
         itineraryTableRows.forEach(row => {
@@ -982,7 +1033,7 @@
         let detailedHtmlPart = "";
         if (detailedItineraryHtml && !detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.")) {
              hasContent = true;
-             detailedHtmlPart = `<tr><td style="padding:10px;font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif;font-size:12px; line-height: 1.6;" class="section-content-box detailed-itinerary-text">${hasSummaryData ? '<p style="font-weight:bold; margin-top:15px; margin-bottom:5px; font-size:12px;">상세 일정</p>' : ''}${detailedItineraryHtml}</td></tr>`;
+             detailedHtmlPart = `<tr><td style="padding:10px;font-family:'맑은 고딕','Malgun Gothic','돋움',dotum,sans-serif; line-height: 1.6;" class="section-content-box detailed-itinerary-text">${hasSummaryData ? '<p style="font-weight:bold; margin-top:15px; margin-bottom:5px; font-size:12px;">상세 일정</p>' : ''}${detailedItineraryHtml}</td></tr>`;
         } else if (detailedItineraryHtml.includes("입력된 상세 일정이 없습니다.") && !hasSummaryData) {
             detailedHtmlPart = `<tr><td style="padding:10px; text-align:center; color:#777; border:1px solid #f37021;">입력된 일정이 없습니다.</td></tr>`; hasContent = true;
         }
@@ -997,56 +1048,49 @@
             img { max-width: 100%; height: auto !important; }
             td[style*="padding:20px 15px 40px"] { padding: 10px 8px 20px !important; }
 
-        /* 모든 주요 텍스트 및 테이블 요소 폰트 크기를 9px로 통일 */
-        .quote-group-main-title,
-        .section-title, .price-group-title, .flight-group-title,
-        .basic-info-text p, .traveler-info-text .info-p,
-        .inclusion-exclusion-text div,
-        .footer-notice td, .footer-address,
-        .product-agent-info-table td,
-        .price-details-table th, .price-details-table td,
-        .flight-details-table th, .flight-details-table td, .flight-remark,
-        .itinerary-summary-table th, .itinerary-summary-table td,
-        .detailed-itinerary-text,
-        .detailed-itinerary-text table,
-        .detailed-itinerary-text tr,
-        .detailed-itinerary-text td,
-        .detailed-itinerary-text th,
-        .detailed-itinerary-text p,
-        .detailed-itinerary-text span,
-        .detailed-itinerary-text div,
-        .detailed-itinerary-text li,
-        .detailed-itinerary-text b,
-        .detailed-itinerary-text strong {
-            font-size: 9px !important;
-        }
-         /* 특정 요소들 라인 높이 조정 */
-        .detailed-itinerary-text { line-height: 1.3 !important; }
-        .basic-info-text p, .traveler-info-text .info-p, .inclusion-exclusion-text div { line-height: 1.4 !important; }
-        .emp-details { padding-left: 0px !important; display: block !important; line-height: 1.4 !important; }
-
-
-        .detailed-itinerary-text table[class*="data-table"] th,
-        .detailed-itinerary-text table[class*="data-table"] td,
-        .product-agent-info-table td, /* 아래 중복되는 패딩/워드브레이크와 통합 가능 */
-        .price-details-table th, .price-details-table td,
-        .flight-details-table th, .flight-details-table td,
-        .itinerary-summary-table th, .itinerary-summary-table td {
+            .quote-group-main-title,
+            .section-title, .price-group-title, .flight-group-title,
+            .basic-info-text p, .traveler-info-text .info-p,
+            .inclusion-exclusion-text div,
+            .footer-notice td, .footer-address,
+            .product-agent-info-table td,
+            .price-details-table th, .price-details-table td,
+            .flight-details-table th, .flight-details-table td, .flight-remark,
+            .itinerary-summary-table th, .itinerary-summary-table td,
+            .detailed-itinerary-text,
             .detailed-itinerary-text table,
+            .detailed-itinerary-text tr,
+            .detailed-itinerary-text td,
+            .detailed-itinerary-text th,
+            .detailed-itinerary-text p,
+            .detailed-itinerary-text span,
+            .detailed-itinerary-text div,
+            .detailed-itinerary-text li,
+            .detailed-itinerary-text b,
+            .detailed-itinerary-text strong {
+                font-size: 9px !important;
+            }
+            .detailed-itinerary-text { line-height: 1.3 !important; }
+            .basic-info-text p, .traveler-info-text .info-p, .inclusion-exclusion-text div { line-height: 1.4 !important; }
+            .emp-details { padding-left: 0px !important; display: block !important; line-height: 1.4 !important; }
+
+            .detailed-itinerary-text table[class*="data-table"] th,
+            .detailed-itinerary-text table[class*="data-table"] td,
+            .product-agent-info-table td,
+            .price-details-table th, .price-details-table td,
+            .flight-details-table th, .flight-details-table td,
+            .itinerary-summary-table th, .itinerary-summary-table td {
                 padding: 3px 2px !important;
                 word-break: break-all !important;
                 white-space: normal !important;
             }
 
-        .section-title img { width: 16px !important; height: 16px !important; vertical-align: middle !important; }
-        .section-title strong { vertical-align: middle !important; }
-        /* td.section-content-box 등은 이제 위에서 9px로 통합됨 */
+            .section-title img { width: 16px !important; height: 16px !important; vertical-align: middle !important; }
+            .section-title strong { vertical-align: middle !important; }
             .product-agent-info-table td[style*="width:100px"] { width: auto !important; min-width: 60px; padding-right: 5px !important; }
         } </style>`;
     }
 
-
-    // ----- 데이터 저장/불러오기 함수 -----
     function getAllEditorDataAsObject() {
         const data = {
             globalSettings: {
@@ -1068,7 +1112,7 @@
             const groupIndex = quoteGroupElement.dataset.groupIndex;
             const sourceGroupData = {
                 groupTitle: quoteGroupElement.querySelector(`input[name="quote_group_title[${groupIndex}]"]`).value,
-                borderColor: quoteGroupElement.style.borderColor || quoteGroupBorderColors[0], // 현재 테두리 색상 저장
+                borderColor: quoteGroupElement.style.borderColor || quoteGroupBorderColors[0],
                 priceSubgroups: [],
                 inclusionExclusion: {
                     includedTextarea: quoteGroupElement.querySelector(`textarea[name="included_items_textarea[${groupIndex}]"]`)?.value || '',
@@ -1149,6 +1193,7 @@
             document.getElementById('quoteGroupsContainer').innerHTML = '';
             quoteGroupCounter = 0;
             detailedItineraryDayGroupCounters = {};
+            currentBorderColorIndex = 0;
 
             if (data.globalSettings) {
                 document.getElementById('customerName').value = data.globalSettings.customerName || '';
@@ -1167,12 +1212,6 @@
                 data.quoteGroups.forEach(groupData => {
                     createQuoteGroup(quoteGroupCounter++, null, groupData);
                 });
-                // Restore currentBorderColorIndex if needed, or let it continue from where it was.
-                // For simplicity, if the last loaded group had a specific color,
-                // the next *newly created* group will pick up from the currentBorderColorIndex
-                // which might have been advanced by the loaded groups if they didn't have a borderColor.
-                // If all loaded groups had a borderColor, currentBorderColorIndex would not have advanced during their creation.
-                // This behavior is generally fine.
             }
             alert("견적 데이터 복원 완료.");
         } catch (error) {
@@ -1181,12 +1220,11 @@
         }
     }
 
-
-    // ----- DOMContentLoaded 및 이벤트 리스너 -----
     document.addEventListener('DOMContentLoaded', function() {
         enableSelectOnFocus('form[name="form1"]');
         createQuoteGroup(quoteGroupCounter++);
         setTimeout(() => { if (document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur(); }, 200);
+
         const globalAddBtn = document.getElementById('addGlobalQuoteGroupBtn');
         if (globalAddBtn) {
             globalAddBtn.addEventListener('click', function() {
@@ -1199,18 +1237,48 @@
             });
         }
         document.getElementById('quoteGroupsContainer').addEventListener('click', function(e) {
-            const target = e.target; const quoteGroupElement = target.closest('.quote-group-section'); if (!quoteGroupElement) return;
-            const quoteGroupIndex = quoteGroupElement.dataset.groupIndex; const priceSubgroupElement = target.closest('.price-subgroup');
-            if (target.closest('.delete-quote-group-btn')) { if (confirm('이 견적 그룹 전체를 삭제하시겠습니까?')) { delete detailedItineraryDayGroupCounters[quoteGroupIndex]; quoteGroupElement.remove(); } }
-            else if (target.closest('.copy-quote-group-btn')) { duplicateQuoteGroup(quoteGroupElement); }
-            else if (target.closest('.delete-dynamic-section-btn')) { const dynamicSection = target.closest('.dynamic-section'); if (dynamicSection) { dynamicSection.remove(); if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement); } }
-            else if (target.closest('.delete-row')) { const row = target.closest('tr'); if (row) { row.remove(); if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement); } }
-            else if (target.closest('.add-detailed-itinerary-day-group-button')) {
+            const target = e.target;
+            const quoteGroupElement = target.closest('.quote-group-section');
+            if (!quoteGroupElement) return;
+
+            const quoteGroupIndex = quoteGroupElement.dataset.groupIndex;
+            const priceSubgroupElement = target.closest('.price-subgroup');
+
+            if (target.closest('.delete-quote-group-btn')) {
+                if (confirm('이 견적 그룹 전체를 삭제하시겠습니까?')) {
+                    delete detailedItineraryDayGroupCounters[quoteGroupIndex];
+                    quoteGroupElement.remove();
+                }
+            } else if (target.closest('.copy-quote-group-btn')) {
+                duplicateQuoteGroup(quoteGroupElement);
+            } else if (target.closest('.delete-dynamic-section-btn')) {
+                const dynamicSection = target.closest('.dynamic-section');
+                if (dynamicSection) {
+                    dynamicSection.remove();
+                    if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement);
+                }
+            } else if (target.closest('.delete-row')) {
+                const row = target.closest('tr');
+                if (row) {
+                    row.remove();
+                    if (priceSubgroupElement) updateGrandTotalForSubgroup(priceSubgroupElement);
+                }
+            } else if (target.closest('.add-detailed-itinerary-day-group-button')) { // 수정된 부분
                 const container = quoteGroupElement.querySelector(`#detailedItineraryGroupsContainer_${quoteGroupIndex}`);
-                if (container) { createDetailedItineraryDayGroupForQuoteGroup(quoteGroupIndex, container); updateDetailedItineraryGroupNumbering(quoteGroupIndex); }
+                if (container) {
+                    const newDayGroup = createDetailedItineraryDayGroupForQuoteGroup(quoteGroupIndex, container);
+                    if (newDayGroup) {
+                        const tbody = newDayGroup.querySelector('.detailed-itinerary-day-group-table-body');
+                        addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, quoteGroupIndex, newDayGroup.dataset.dayGroupIndex); // 빈 행 추가
+                    }
+                    updateDetailedItineraryGroupNumbering(quoteGroupIndex);
+                }
             } else if (target.closest('.delete-detailed-itinerary-day-group-btn')) {
                 const dayGroup = target.closest('.detailed-itinerary-day-group');
-                if (dayGroup) { dayGroup.remove(); updateDetailedItineraryGroupNumbering(quoteGroupIndex); }
+                if (dayGroup) {
+                    dayGroup.remove();
+                    updateDetailedItineraryGroupNumbering(quoteGroupIndex);
+                }
             } else if (target.closest('.add-detailed-itinerary-row-to-day-group')) {
                 const dayGroup = target.closest('.detailed-itinerary-day-group');
                 if (dayGroup) {
@@ -1218,10 +1286,15 @@
                     const dayGroupUniqueIndex = dayGroup.dataset.dayGroupIndex;
                     if (tbody) {
                         const newRow = addDetailedItineraryRowToDayGroupForQuoteGroup(tbody, quoteGroupIndex, dayGroupUniqueIndex);
-                        if (newRow) { const firstEditableDiv = newRow.querySelector('.detailed-itinerary-day-input'); if(firstEditableDiv?.focus) firstEditableDiv.focus(); }
+                        if (newRow) {
+                            const firstEditableDiv = newRow.querySelector('.detailed-itinerary-day-input');
+                            if(firstEditableDiv?.focus) firstEditableDiv.focus();
+                        }
                     }
                 }
-            } else if (target.closest('.delete-detailed-itinerary-row')) { target.closest('tr').remove(); }
+            } else if (target.closest('.delete-detailed-itinerary-row')) {
+                target.closest('tr').remove();
+            }
         });
         document.getElementById('quoteGroupsContainer').addEventListener('paste', function(e) {
             const targetInput = e.target;
@@ -1276,8 +1349,8 @@
     });
 
     function duplicateQuoteGroup(sourceGroupElement) {
-        const sourceGroupIndex = sourceGroupElement.dataset.groupIndex; const newGroupIndex = quoteGroupCounter++;
-        detailedItineraryDayGroupCounters[newGroupIndex] = 0;
+        const sourceGroupIndex = sourceGroupElement.dataset.groupIndex;
+        const newGroupIndex = quoteGroupCounter++;
 
         const sourceData = {
             groupTitle: sourceGroupElement.querySelector(`input[name="quote_group_title[${sourceGroupIndex}]"]`).value,
@@ -1344,7 +1417,6 @@
             });
             sourceData.detailedItineraryGroups.push(dayGroupData);
         });
-
         createQuoteGroup(newGroupIndex, sourceGroupElement, sourceData);
     }
 
@@ -1385,15 +1457,12 @@
             }
             function collapseGroupOnly_Preview(contentId, iconId) {
                 const contentElement = document.getElementById(contentId);
-                // 현재 확장된 상태일 때만 접기 동작
                 if (contentElement && contentElement.style.display !== 'none') {
-                    togglePreviewGroupContent(contentId, iconId); // 기존 토글 함수 사용
+                    togglePreviewGroupContent(contentId, iconId);
                 }
             }
         <\/script> <style>
     .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; }
-
-    /* --- 웹 기본 폰트 크기 설정 --- */
     .basic-info-text p, .greeting-text, .intro-text-preview,
     .product-agent-info-table td,
     .traveler-info-text .info-p,
@@ -1403,20 +1472,16 @@
     }
     .quote-group-main-title { font-size: 14px; color:#1a6f2b; }
     .price-group-title, .flight-group-title { font-weight:bold; font-size:12px; }
-
     .price-details-table th, .price-details-table td,
     .flight-details-table th, .flight-details-table td, .flight-remark,
     .itinerary-summary-table th, .itinerary-summary-table td,
-    .detailed-itinerary-data-table th, .detailed-itinerary-data-table td { /* 웹 기본 테이블 폰트 */
+    .detailed-itinerary-data-table th, .detailed-itinerary-data-table td {
         font-size: 12px;
     }
-    /* 상세 일정표 헤더에 대한 웹 기본값 명시 (generateHTMLFromDetailedItinerary에서 인라인 스타일 제거했으므로) */
     .detailed-itinerary-data-table thead tr {
-        font-size: 12px; /* 웹에서 상세 일정 헤더 폰트 크기 */
+        font-size: 12px;
     }
     .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; }
-
-    /* --- 모바일 (760px 이하) 폰트 크기 설정 --- */
     @media screen and (max-width: 760px) {
         .preview-toggle-icon { font-size: 1em; }
         .basic-info-text p, .greeting-text, .intro-text-preview,
@@ -1438,7 +1503,6 @@
             font-size: 9px !important;
         }
         .detailed-itinerary-text { line-height: 1.3 !important; }
-        /* 모바일에서 상세 일정 헤더도 9px 적용 */
         .detailed-itinerary-data-table thead tr {
              font-size: 9px !important;
         }
@@ -1485,17 +1549,14 @@
                     }
                 }
             }
-            function collapseGroupOnly_Preview(contentId, iconId) { // 함수명 변경 및 스크롤 로직 제거
+            function collapseGroupOnly_Preview(contentId, iconId) {
                 const contentElement = document.getElementById(contentId);
-                // 현재 확장된 상태일 때만 접기 동작
                 if (contentElement && contentElement.style.display !== 'none') {
-                    togglePreviewGroupContent(contentId, iconId); // 기존 토글 함수 사용
+                    togglePreviewGroupContent(contentId, iconId);
                 }
             }
         <\/script> <style>
     .preview-toggle-icon { margin-left: 10px; font-size: 0.9em; color: #555; cursor: pointer; }
-
-    /* --- 웹 기본 폰트 크기 설정 --- */
     .basic-info-text p, .greeting-text, .intro-text-preview,
     .product-agent-info-table td,
     .traveler-info-text .info-p,
@@ -1505,7 +1566,6 @@
     }
     .quote-group-main-title { font-size: 14px; color:#1a6f2b;}
     .price-group-title, .flight-group-title { font-weight:bold; font-size:12px; }
-
     .price-details-table th, .price-details-table td,
     .flight-details-table th, .flight-details-table td, .flight-remark,
     .itinerary-summary-table th, .itinerary-summary-table td,
@@ -1516,8 +1576,6 @@
         font-size: 12px;
     }
     .detailed-itinerary-data-table td[style*="width:60%"] { word-break: break-word; }
-
-    /* --- 모바일 (760px 이하) 폰트 크기 설정 --- */
     @media screen and (max-width: 760px) {
         .preview-toggle-icon { font-size: 1em; }
          .basic-info-text p, .greeting-text, .intro-text-preview,
